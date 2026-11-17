@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="light dark" name="color-scheme"/>
+<title>Yong-Hyun Lee (이용현) — Data Scientist &amp; Former Astronomer</title>
+<style>
+    :root {
+      --page: light-dark(#f7f5f0, #10151c);
+      --surface: light-dark(#ffffff, #171e28);
+      --surface-muted: light-dark(#eeebe4, #202a36);
+      --text: light-dark(#252a30, #edf1f4);
+      --muted: light-dark(#6b737c, #a8b3bf);
+      --line: light-dark(#e2ded6, #303b48);
+      --accent: light-dark(#bd7046, #e3a27e);
+      --accent-deep: light-dark(#8f4d2f, #f0b38f);
+      --ink: light-dark(#172432, #e9eef3);
+      --white: #ffffff;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--text);
+      font-family: Montserrat, "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    #app {
+      min-height: 100vh;
+      width: 100%;
+      background-color: light-dark(#f7f5f0, #10151c);
+      color: var(--text);
+      border-radius: 0;
+      overflow: hidden;
+    }
+    a { color: var(--accent-deep); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    button { font: inherit; }
+    .site-header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; }
+    .brand-mark {
+      width: 40px; height: 40px; display: grid; place-items: center;
+      color: #fff; background: var(--accent); border-radius: 50%; font-size: 13px; font-weight: 800;
+      letter-spacing: -.5px;
+    }
+    .brand-name { font-size: 14px; letter-spacing: .12em; text-transform: uppercase; font-weight: 800; line-height: 1.2; }
+    .brand-sub { display: block; margin-top: 5px; color: var(--muted); font-size: 10px; letter-spacing: .16em; font-weight: 600; }
+    .nav { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .nav button {
+      padding: 10px 14px; border: 0; border-radius: 999px; background: transparent; color: var(--muted);
+      cursor: pointer; font-size: 12px; font-weight: 750; transition: background .2s, color .2s;
+    }
+    .nav button:hover, .nav button[aria-current="page"] { background: var(--surface-muted); color: var(--text); }
+    .nav button[aria-current="page"] { box-shadow: inset 0 0 0 1px var(--line); }
+    .hero-wrap { max-width: 1180px; margin: 0 auto; padding: 18px 28px 46px; }
+    .hero {
+      min-height: 440px; position: relative; overflow: hidden; isolation: isolate;
+      display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr); align-items: center;
+      padding: clamp(30px, 5vw, 68px); border-radius: 26px; color: #fff;
+      background: radial-gradient(ellipse at 74% 43%, rgba(205,118,77,.35), transparent 39%),
+        radial-gradient(ellipse at 88% 90%, rgba(94,126,160,.35), transparent 43%),
+        linear-gradient(120deg, #172432 0%, #253344 58%, #141d29 100%);
+    }
+    .hero::before, .hero::after { content: ""; position: absolute; z-index: -1; border: 1px solid rgba(255,255,255,.11); border-radius: 50%; }
+    .hero::before { width: 510px; height: 510px; right: -40px; top: -30px; }
+    .hero::after { width: 380px; height: 380px; right: 25px; top: 35px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; color: #edba9a; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 800; }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: currentColor; }
+    h1 { margin: 20px 0 14px; max-width: 690px; font-size: clamp(39px, 5.5vw, 68px); line-height: 1.05; letter-spacing: -.055em; font-weight: 750; }
+    .hero-role { color: #f0bd9d; font-size: clamp(14px, 1.5vw, 17px); font-weight: 650; }
+    .hero-copy { max-width: 570px; color: rgba(255,255,255,.78); font-size: 14px; line-height: 1.9; margin: 22px 0 27px; }
+    .actions { display: flex; gap: 11px; flex-wrap: wrap; }
+    .btn { padding: 12px 18px; border-radius: 999px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; transition: transform .2s, opacity .2s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: #d58d63; color: #172432; border: 1px solid #d58d63; }
+    .btn-outline { color: #fff; border: 1px solid rgba(255,255,255,.33); background: rgba(255,255,255,.04); }
+    .orbit-art { width: 100%; max-width: 400px; justify-self: end; align-self: center; opacity: .97; }
+    .main { max-width: 1180px; margin: 0 auto; padding: 0 28px 72px; }
+    .page-panel { display: none; animation: appear .26s ease-out; }
+    .page-panel.active { display: block; }
+    @keyframes appear { from { opacity: .2; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin: 0 0 25px; }
+    .kicker { display: block; color: var(--accent); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 850; margin-bottom: 9px; }
+    h2 { margin: 0; font-size: clamp(26px, 3vw, 36px); line-height: 1.2; letter-spacing: -.04em; }
+    h3 { margin: 0 0 8px; font-size: 17px; line-height: 1.35; letter-spacing: -.025em; }
+    .section-intro { max-width: 650px; color: var(--muted); margin: 12px 0 0; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 25px; }
+    .card p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    .icon-box { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: light-dark(#f4e7df, #382a27); color: var(--accent-deep); margin-bottom: 18px; }
+    .icon-box svg { width: 21px; height: 21px; }
+    .feature-band { margin: 44px 0 0; display: grid; grid-template-columns: .85fr 1.15fr; gap: 24px; align-items: center; padding: 31px; border: 1px solid var(--line); background: var(--surface-muted); border-radius: var(--radius); }
+    .feature-band p { margin: 9px 0 0; color: var(--muted); font-size: 13px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+    .tag { display: inline-flex; padding: 7px 10px; border-radius: 99px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-size: 11px; font-weight: 700; }
+    .list-card { border-top: 1px solid var(--line); padding: 22px 0; display: grid; grid-template-columns: 80px minmax(0,1fr); gap: 18px; }
+    .year { color: var(--accent); font-weight: 850; font-size: 12px; padding-top: 4px; }
+    .list-card p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .list-card .meta { font-size: 11px; color: var(--muted); margin-bottom: 5px; letter-spacing: .035em; }
+    .pub-list { border-bottom: 1px solid var(--line); }
+    .pub-title { color: var(--text); font-weight: 700; text-decoration: none; }
+    .pub-title:hover { color: var(--accent-deep); }
+    .pill { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 4px 8px; color: var(--muted); font-size: 10px; font-weight: 750; margin-left: 7px; }
+    .cv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .cv-block { margin-bottom: 28px; }
+    .cv-block h3 { padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .cv-item { padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .cv-item:last-child { border-bottom: 0; }
+    .cv-item strong { display: block; font-size: 13px; }
+    .cv-item span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .note { margin-top: 18px; font-size: 11px; color: var(--muted); }
+    .contact-strip { margin-top: 36px; padding: 26px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .contact-strip p { color: var(--muted); margin: 5px 0 0; font-size: 12px; }
+    footer { border-top: 1px solid var(--line); max-width: 1180px; margin: 0 auto; padding: 22px 28px 32px; color: var(--muted); display: flex; justify-content: space-between; gap: 15px; flex-wrap: wrap; font-size: 10px; letter-spacing: .04em; }
+    .archive-label { display: inline-flex; align-items: center; border-radius: 99px; padding: 6px 10px; background: light-dark(#efe3d9, #352923); color: var(--accent-deep); font-size: 10px; font-weight: 800; }
+    @media (max-width: 780px) {
+      .site-header { align-items: flex-start; flex-direction: column; padding: 18px 20px 8px; gap: 12px; }
+      .nav { width: 100%; justify-content: flex-start; }
+      .brand-sub { font-size: 9px; letter-spacing: .10em; }
+      .nav button { padding: 8px 11px; }
+      .hero-wrap { padding: 15px 16px 34px; }
+      .hero { grid-template-columns: 1fr; min-height: 0; padding: 31px 25px; }
+      .orbit-art { max-width: 250px; justify-self: center; margin: 15px auto -8px; }
+      .main { padding: 0 16px 48px; }
+      .grid-3, .grid-2, .cv-grid, .feature-band { grid-template-columns: 1fr; }
+      .feature-band { padding: 24px; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .contact-strip { align-items: flex-start; flex-direction: column; }
+      footer { padding: 20px 16px 28px; }
+    }
+
+    /* Main introduction and career overview. */
+    .main-intro {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      max-width: 1000px;
+      margin: 28px auto 0;
+      padding: clamp(28px, 5vw, 64px);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 24px;
+      color: #fff;
+      background:
+        radial-gradient(ellipse at 74% 43%, rgba(205,118,77,.35), transparent 39%),
+        radial-gradient(ellipse at 88% 90%, rgba(94,126,160,.35), transparent 43%),
+        linear-gradient(120deg, #172432 0%, #253344 58%, #141d29 100%);
+      box-shadow: 0 16px 45px rgba(13,23,34,.14);
+    }
+    /* Embedded supernova-remnant illustration for the Main page. */
+    .main-intro::before {
+      content: "";
+      position: absolute;
+      top: 48px;
+      right: -115px;
+      width: min(88vw, 790px);
+      aspect-ratio: 420 / 360;
+      z-index: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MjAgMzYwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkFic3RyYWN0IGlsbHVzdHJhdGlvbiBvZiBhIHN1cGVybm92YSByZW1uYW50IGFuZCBzdXJyb3VuZGluZyBnYXMiPgogICAgICAgIDxkZWZzPgogICAgICAgICAgPHJhZGlhbEdyYWRpZW50IGlkPSJuZWJ1bGEiIGN4PSI1MCUiIGN5PSI0OCUiIHI9IjU1JSI+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Y2YzZhMCIgc3RvcC1vcGFjaXR5PSIuOTUiLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIuMjMiIHN0b3AtY29sb3I9IiNlNzhkNjMiIHN0b3Atb3BhY2l0eT0iLjgiLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIuNTIiIHN0b3AtY29sb3I9IiM5YTcwOGIiIHN0b3Atb3BhY2l0eT0iLjU3Ii8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzZjOWRiYiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgICAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgICAgICAgPGxpbmVhckdyYWRpZW50IGlkPSJyaW5nIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Y4Y2JhOSIgc3RvcC1vcGFjaXR5PSIuODgiLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiM4ZmFhYzgiIHN0b3Atb3BhY2l0eT0iLjQyIi8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2U5OGI2OCIgc3RvcC1vcGFjaXR5PSIuODIiLz4KICAgICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgICA8ZmlsdGVyIGlkPSJibHVyIj48ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI4Ii8+PC9maWx0ZXI+CiAgICAgICAgPC9kZWZzPgogICAgICAgIDxnIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii42NSI+CiAgICAgICAgICA8Y2lyY2xlIGN4PSI2MSIgY3k9IjU2IiByPSIxLjgiLz48Y2lyY2xlIGN4PSIxMDMiIGN5PSIxMDQiIHI9IjEuMyIvPjxjaXJjbGUgY3g9IjMyNyIgY3k9IjQ5IiByPSIxLjUiLz48Y2lyY2xlIGN4PSIzNTIiIGN5PSIxMjgiIHI9IjIiLz48Y2lyY2xlIGN4PSIyODgiIGN5PSIyNjMiIHI9IjEuNCIvPjxjaXJjbGUgY3g9IjgyIiBjeT0iMjc2IiByPSIxLjciLz48Y2lyY2xlIGN4PSIxNzIiIGN5PSIzMSIgcj0iMS4yIi8+PGNpcmNsZSBjeD0iMzg4IiBjeT0iMjA5IiByPSIxLjEiLz48Y2lyY2xlIGN4PSI0NCIgY3k9IjE4MCIgcj0iMS4xIi8+PGNpcmNsZSBjeD0iMjE1IiBjeT0iMzIxIiByPSIxLjciLz4KICAgICAgICA8L2c+CiAgICAgICAgPGNpcmNsZSBjeD0iMjIwIiBjeT0iMTc2IiByPSIxMjMiIGZpbGw9InVybCgjbmVidWxhKSIgZmlsdGVyPSJ1cmwoI2JsdXIpIi8+CiAgICAgICAgPGVsbGlwc2UgY3g9IjIyMCIgY3k9IjE3NiIgcng9IjE0MyIgcnk9IjkwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjcmluZykiIHN0cm9rZS13aWR0aD0iOCIgb3BhY2l0eT0iLjc1IiB0cmFuc2Zvcm09InJvdGF0ZSgtMjQgMjIwIDE3NikiLz4KICAgICAgICA8ZWxsaXBzZSBjeD0iMjIwIiBjeT0iMTc2IiByeD0iMTA1IiByeT0iMTM5IiBmaWxsPSJub25lIiBzdHJva2U9IiNhOGM2ZDgiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjU1IiB0cmFuc2Zvcm09InJvdGF0ZSgzOCAyMjAgMTc2KSIvPgogICAgICAgIDxlbGxpcHNlIGN4PSIyMjAiIGN5PSIxNzYiIHJ4PSI5MyIgcnk9IjYxIiBmaWxsPSJub25lIiBzdHJva2U9IiNmMmIzOGMiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjgiIHRyYW5zZm9ybT0icm90YXRlKDEzIDIyMCAxNzYpIi8+CiAgICAgICAgPHBhdGggZD0iTTkwIDIwOCBDMTMyIDE2NiAxNTMgMTI4IDE5NCAxMzcgUzI2NSAyMjEgMzIxIDE1NyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZWZiMDhiIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iLjciLz4KICAgICAgICA8cGF0aCBkPSJNMTE4IDEyMiBDMTczIDE1MyAxNzcgMjA0IDIzMyAyMTUgUzI5NiAxODUgMzIzIDIxOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOWRjMWQ2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iLjYiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyMjAiIGN5PSIxNzYiIHI9IjE0IiBmaWxsPSIjZmZmM2RmIiBvcGFjaXR5PSIuOTYiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyMjAiIGN5PSIxNzYiIHI9IjI5IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmRmYmMiIHN0cm9rZS13aWR0aD0iMS41IiBvcGFjaXR5PSIuNjUiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyMjAiIGN5PSIxNzYiIHI9IjQzIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iLjciIG9wYWNpdHk9Ii4yOCIvPgogICAgICA8L3N2Zz4=");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      opacity: .30;
+    }
+    .main-intro::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(15,23,33,.21), transparent 72%);
+    }
+    .main-identity {
+      padding: 0 0 2px;
+    }
+    .main-intro > * { position: relative; z-index: 1; }
+    .main-name {
+      margin: 0 0 12px;
+      max-width: none;
+      font-size: clamp(37px, 5.4vw, 64px);
+      line-height: 1.14;
+      letter-spacing: -.05em;
+      font-weight: 760;
+      color: var(--ink);
+    }
+    .main-name span {
+      font-size: .68em;
+      font-weight: 650;
+      letter-spacing: -.045em;
+      white-space: nowrap;
+    }
+    .main-subtitle {
+      font-size: clamp(11px, 1.5vw, 14px);
+      line-height: 1.8;
+      color: var(--accent-deep);
+      font-weight: 700;
+      letter-spacing: .035em;
+      margin: 0;
+    }
+    .soft-rule {
+      width: 100%;
+      height: 1px;
+      border: 0;
+      background-color: var(--line);
+      margin: 44px 0 36px;
+    }
+    .language-label {
+      display: block;
+      margin: 0 0 24px;
+      font-size: 10px;
+      line-height: 1.4;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .biography p {
+      margin: 0 0 22px;
+      font-size: 14px;
+      line-height: 2.04;
+      color: var(--muted);
+      letter-spacing: -.005em;
+    }
+    .biography p:last-child { margin-bottom: 0; }
+    .biography p:first-of-type {
+      font-size: clamp(15px, 1.6vw, 18px);
+      line-height: 1.87;
+      color: var(--text);
+    }
+    .biography strong {
+      color: var(--text);
+      font-weight: 710;
+    }
+    .biography-ko {
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Segoe UI", sans-serif;
+      word-break: keep-all;
+    }
+    .biography-ko p { font-size: 14px; line-height: 2.04; }
+    .biography-ko p:first-of-type { font-size: clamp(15px, 1.6vw, 18px); }
+
+    /* Main page uses light text on a navy background. */
+    .main-intro .main-name { color: #ffffff; }
+    .main-intro .main-subtitle { color: #f0bd9d; }
+    .main-intro .soft-rule { background-color: rgba(255,255,255,.19); }
+    .main-intro .language-label { color: #f0bd9d; }
+    .main-intro .biography p { color: rgba(245,247,251,.85); }
+    .main-intro .biography p:first-of-type { color: rgba(255,255,255,.98); }
+    .main-intro .biography strong { color: #ffffff; }
+    @media (max-width: 780px) {
+      .main-intro::before { width: 660px; right: -240px; top: 100px; opacity: .23; }
+      .main-intro { margin: 8px auto 0; padding: 28px 23px 34px; border-radius: 18px; }
+      .main-name { font-size: clamp(34px, 7.8vw, 48px); }
+      .main-name span { font-size: .64em; }
+      .main-subtitle { font-size: 11px; }
+      .soft-rule { margin: 30px 0 27px; }
+      .biography p { line-height: 1.94; }
+    }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+  
+
+    /* Career-focused navigation, added to the existing Weebly-inspired design. */
+    .nav button:focus-visible, .career-path:focus-visible, .career-subpath:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .nav .nav-archive { opacity: .78; }
+    .data-career-grid .card { display: flex; flex-direction: column; min-height: 360px; }
+    .data-career-grid .card h3 { font-size: clamp(18px, 2vw, 22px); }
+    .data-career-grid .card p { line-height: 1.9; font-size: 14px; }
+    .data-career-grid .tag-row { margin-top: auto; padding-top: 24px; }
+    .data-note { margin-top: 25px; }
+    .career-hub { max-width: 1000px; margin: 52px auto 12px; }
+    .career-hub-heading { margin-bottom: 22px; }
+    .career-hub-heading .section-intro { margin-top: 10px; }
+    .career-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .career-path {
+      font: inherit;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 246px;
+      text-align: left;
+      cursor: pointer;
+      border-radius: 20px;
+      padding: 29px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      color: #fff;
+      background-color: #172432;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .career-path:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(20,30,40,.14); }
+    .career-path-data {
+      background:
+        radial-gradient(circle at 100% 0%, rgba(214,150,106,.27), transparent 60%),
+        linear-gradient(125deg, #233849, #192733);
+    }
+    .career-path-astro {
+      background:
+        radial-gradient(circle at 90% 25%, rgba(103,150,185,.31), transparent 55%),
+        radial-gradient(circle at 10% 100%, rgba(196,115,86,.18), transparent 55%),
+        linear-gradient(135deg, #172432, #263446);
+    }
+    .path-index { font-size: 10px; font-weight: 800; color: #ebbb9b; letter-spacing: .18em; }
+    .path-title { display: block; margin-top: 16px; font-size: clamp(26px, 2.8vw, 37px); font-weight: 760; letter-spacing: -.045em; }
+    .path-desc { color: rgba(255,255,255,.74); font-size: 13px; line-height: 1.85; margin-top: 12px; }
+    .path-arrow { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: auto; padding-top: 16px; font-size: 11px; font-weight: 800; letter-spacing: .04em; color: #f2bd9a; }
+    .path-arrow span { font-size: 23px; line-height: 1; }
+    .career-subpaths { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+    .career-subpath {
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+      text-align: left;
+      border-radius: 15px;
+      padding: 21px 26px;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      transition: border-color .18s ease, transform .18s ease;
+    }
+    .career-subpath:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .career-subpath strong { display: block; font-size: 15px; }
+    .career-subpath small { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .career-subpath > span:last-child { font-size: 20px; color: var(--accent); }
+    .cv-refined .cv-block { margin-bottom: 34px; }
+    .cv-refined .cv-block > .cv-block { margin: 0; }
+    .cv-refined .cv-subheading {
+      color: var(--accent-deep);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 800;
+      margin-top: 19px;
+      margin-bottom: 3px;
+    }
+    .cv-refined .cv-placeholder { border: 1px dashed var(--line); border-radius: 12px; padding: 16px; background: var(--surface); margin: 14px 0 4px; }
+    .cv-refined .cv-placeholder strong { color: var(--text); }
+    .cv-refined .cv-placeholder span { color: var(--muted); }
+    @media (max-width: 920px) {
+      .site-header { align-items: flex-start; flex-direction: column; gap: 12px; }
+      .nav { width: 100%; justify-content: flex-start; }
+      .nav button { padding: 8px 12px; }
+    }
+    @media (max-width: 780px) {
+      .career-hub { margin-top: 42px; }
+      .career-paths, .career-subpaths { grid-template-columns: 1fr; gap: 12px; }
+      .career-subpaths { margin-top: 12px; }
+      .career-path { min-height: 218px; padding: 24px; }
+      .data-career-grid .card { min-height: 0; }
+    }
+
+    /* Industry portfolio enhancements */
+    .data-career-grid .card p + p { margin-top: 15px; }
+    .data-career-grid .card p strong { color: var(--text); font-weight: 750; }
+    .data-cv-link {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .data-cv-link button {
+      cursor: pointer;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--accent-deep);
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 12px;
+    }
+    .data-cv-link button:hover { border-color: var(--accent); }
+    .cv-projects { margin: 6px 0 48px; }
+    .cv-projects-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .cv-projects-head h3 { font-size: 23px; letter-spacing: -.035em; }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .project-card {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 27px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .project-period {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent-deep);
+      letter-spacing: .045em;
+      margin-bottom: 12px;
+    }
+    .project-period span {
+      color: var(--muted);
+      font-weight: 550;
+    }
+    .project-card h3 { font-size: 19px; line-height: 1.4; margin: 0 0 6px; }
+    .project-client { font-size: 12px; color: var(--muted); margin: 0 0 14px; }
+    .project-detail { color: var(--muted); font-size: 13px; line-height: 1.85; margin: 8px 0; }
+    .project-detail strong { color: var(--text); }
+    .project-card .tag-row { margin-top: auto; padding-top: 20px; }
+    .project-card .tag { font-weight: 650; }
+    .cv-projects + .cv-grid { padding-top: 12px; border-top: 1px solid var(--line); }
+    @media (max-width: 780px) {
+      .project-grid { grid-template-columns: 1fr; }
+      .project-card { padding: 22px; }
+      .data-cv-link { align-items: flex-start; }
+    }
+
+    /* Professional projects: chronological detail in a publications-like layout */
+    .cv-quicklink { width: 100%; margin-top: 16px; }
+    .inline-nav {
+      font: inherit;
+      color: var(--accent-deep);
+      border: 0;
+      background: none;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+    .project-history {
+      border-bottom: 1px solid var(--line);
+    }
+    .project-entry {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: clamp(15px, 3vw, 36px);
+      border-top: 1px solid var(--line);
+      padding: 30px 0 32px;
+    }
+    .project-year {
+      color: var(--accent-deep);
+      font-size: 12px;
+      font-weight: 800;
+      padding-top: 4px;
+      letter-spacing: .02em;
+    }
+    .project-entry-main { min-width: 0; }
+    .project-entry-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+    .project-dates { color: var(--muted); font-size: 12px; }
+    .project-status {
+      color: var(--accent-deep);
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      padding: 2px 9px;
+      font-weight: 800;
+      font-size: 10px;
+    }
+    .project-entry h3 { font-size: clamp(18px, 2vw, 23px); margin: 0 0 4px; }
+    .project-role { margin: 0 0 13px !important; color: var(--accent-deep) !important; font-weight: 700; font-size: 12px !important; }
+    .project-entry-main p {
+      font-size: 13px;
+      line-height: 1.9;
+      margin: 9px 0;
+      color: var(--muted);
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+    .project-entry-main p strong { color: var(--text); font-weight: 800; }
+    .project-entry .tag-row { margin-top: 16px; }
+    .cv-simple .cv-block { margin-bottom: 8px; }
+    .cv-simple .cv-item { padding: 17px 0; }
+    .cv-simple .cv-item strong { font-size: 14px; }
+    .cv-simple .cv-item span { line-height: 1.7; }
+    @media (max-width: 780px) {
+      .project-entry { grid-template-columns: 1fr; gap: 2px; padding: 22px 0 25px; }
+      .project-year { padding-top: 0; }
+      .cv-quicklink { margin-top: 12px; }
+    }
+</style>
+<meta content="Yong-Hyun Lee (이용현) — Data Scientist and former astronomer. Selected industry projects, research on supernova remnants, publications, and career background." name="description"/></head>
+<body>
+<div id="app">
+<header class="site-header">
+<a aria-label="Yong-Hyun Lee home" class="brand" data-go="home" href="#main">
+<span class="brand-mark">YH</span>
+<span class="brand-name">Yong-Hyun Lee<span class="brand-sub">Astronomy · Data Science · AI</span></span>
+</a>
+<nav aria-label="Main navigation" class="nav">
+<button aria-current="page" data-page="main" type="button">Main</button>
+<button data-page="data-science" type="button">Data Science</button>
+<button data-page="projects" type="button">Projects</button>
+<button data-page="astronomy" type="button">Astronomy</button>
+<button data-page="publications" type="button">Publications</button>
+<button data-page="cv" type="button">CV</button>
+
+
+</nav>
+</header>
+
+<main class="main">
+<section class="page-panel active" data-panel="main" id="page-main">
+<div class="main-intro">
+<div class="main-identity">
+<h1 class="main-name">Yong-Hyun Lee <span lang="ko">(이용현)</span></h1>
+<p class="main-subtitle">Data Scientist | Former Astronomer | PhD in Astronomy</p>
+</div>
+<hr class="soft-rule"/>
+<div class="biography biography-ko" lang="ko">
+<span class="language-label">소개 · 한국어</span>
+<p>저는 <strong>우주를 탐구하고 그 원리를 이해하고자 했던 천문학자였고, 이제는 데이터 속에 숨겨진 가능성을 발견하고 현실의 변화로 만들어가는 Data Scientist입니다.</strong></p>
+<p>어린 시절부터 밤하늘 너머의 세상이 궁금했습니다. 중·고등학교 시절, 우주를 향한 막연한 호기심은 어느새 천문학자가 되고 싶다는 꿈으로 자라났습니다. 그 꿈을 따라 대학에서 천문학을 공부하며 우주의 수많은 현상과 그 속에 숨은 원리를 알아갔고, 더 깊은 질문의 답을 찾기 위해 대학원으로 향했습니다. 그곳에서 저는 우주에서 가장 격렬하고 찬란한 순간인 <strong>초신성 폭발</strong>, 그리고 폭발이 남긴 흔적인 <strong>초신성잔해</strong>에 매료되었습니다. 별이 마지막 순간에 남긴 이야기를 관측과 데이터로 읽어내며 우주의 비밀을 탐구했고, 그 여정은 14편의 학술 논문으로 이어졌습니다.</p>
+<p>우주의 비밀을 탐구하는 과정에서 저는 또 다른 가능성을 발견했습니다. 수많은 천문 관측 데이터 속에서 보이지 않던 현상을 찾아내고 의미를 발견하는 경험은, <strong>데이터가 세상을 이해하고 변화시킬 수 있는 강력한 도구</strong>라는 사실을 깨닫게 해주었습니다. 그렇게 별을 연구하던 천문학자에서 데이터로 현실의 문제를 풀어가는 Data Scientist로 새로운 여정을 시작했습니다. 산업 현장의 복잡한 데이터 속에서 미래의 흐름을 예측하는 AI 모델을 개발하고 운영하며, 데이터가 불확실한 미래를 이해하고 더 나은 의사결정으로 이끄는 힘을 경험했습니다. 이제는 그 경험을 바탕으로 생성형 AI가 열어가는 새로운 가능성에 주목하며, 다양한 AI 서비스의 전략을 구상하고 프로젝트를 이끌고 있습니다. <strong>우주에서 시작된 저의 호기심은 이제 데이터와 AI를 통해 더 나은 미래를 그려가는 원동력이 되고 있습니다.</strong></p>
+</div>
+<hr class="soft-rule"/>
+<div class="biography" lang="en">
+<span class="language-label">Introduction · English</span>
+<p>I began my journey as an astronomer, seeking to explore the universe and understand the principles that govern it. Today, I am a <strong>Data Scientist, uncovering the hidden potential of data and turning insights into meaningful change.</strong></p>
+<p>My fascination with the universe began long before I became a scientist. Throughout my middle and high school years, a simple curiosity about the night sky gradually grew into a dream of becoming an astronomer. Following that dream, I studied astronomy at university, where every discovery deepened my curiosity and inspired me to pursue graduate research. There, I became captivated by <strong>supernovae—among the most powerful and spectacular explosions in the universe—and the remnants they leave behind.</strong> Through observations and data, I sought to uncover the stories written in the final moments of stars. This journey of exploration and discovery led to 14 scientific publications.</p>
+<p>Along the way, my exploration of the universe revealed another fascinating frontier: <strong>the power of data to uncover hidden patterns, deepen our understanding of the world, and inspire meaningful change.</strong> This realization led me from studying the cosmos to solving real-world challenges as a Data Scientist. I began developing and operating AI models that predict future trends from complex industrial data, discovering how data-driven insights can help navigate uncertainty and guide better decisions. Today, I continue this journey by exploring the possibilities of generative AI, shaping strategies and leading projects that transform emerging technologies into practical services. <strong>The curiosity that once led me to explore the universe now drives me to envision and shape a better future through data and AI.</strong></p>
+</div>
+</div>
+<section aria-labelledby="career-hub-title" class="career-hub">
+<div class="career-hub-heading">
+<span class="kicker">Explore My Work</span>
+<h2 id="career-hub-title">Two fields. One curiosity.</h2>
+<p class="section-intro">A journey from studying the universe to finding new possibilities in data and AI.</p>
+</div>
+<div class="career-paths">
+<button aria-label="Explore Data Science" class="career-path career-path-data" data-jump="data-science" type="button">
+<span class="path-index">01 / INDUSTRY</span>
+<span class="path-title">Data Science</span>
+<span class="path-desc">Predictive AI &amp; Machine Learning<br/>Generative AI &amp; Strategy</span>
+<span aria-hidden="true" class="path-arrow">Explore <span>↗</span></span>
+</button>
+<button aria-label="Explore Astronomy" class="career-path career-path-astro" data-jump="astronomy" type="button">
+<span class="path-index">02 / RESEARCH</span>
+<span class="path-title">Astronomy</span>
+<span class="path-desc">Young Supernova Remnants<br/>Evolved Supernova Remnants</span>
+<span aria-hidden="true" class="path-arrow">Explore <span>↗</span></span>
+</button>
+</div>
+<div class="career-subpaths">
+<button class="career-subpath" data-jump="projects" type="button"><span><strong>Projects</strong><small>Selected industry achievements</small></span><span aria-hidden="true">↗</span></button>
+<button class="career-subpath" data-jump="publications" type="button"><span><strong>Publications</strong><small>Scientific contributions</small></span><span aria-hidden="true">↗</span></button>
+</div>
+<button class="career-subpath cv-quicklink" data-jump="cv" type="button"><span><strong>CV</strong><small>Professional experience &amp; education</small></span><span aria-hidden="true">↗</span></button>
+</section></section>
+<section class="page-panel" data-panel="data-science" id="page-data-science">
+<div class="section-head">
+<div>
+<span class="kicker">Industrial AI &amp; Innovation</span>
+<h2>Turning Data into Intelligence</h2>
+<p class="section-intro" lang="ko">데이터 분석과 예측 모델링, AI 서비스 기획을 통해 산업 현장의 문제를 해결해 왔습니다. 복잡한 데이터를 실질적인 의사결정에 활용하고, AI 기술이 운영 효율과 비즈니스 성과로 이어지도록 만드는 데 집중하고 있습니다.</p>
+</div>
+</div>
+<div class="grid-2 data-career-grid">
+<article class="card data-card">
+<div aria-hidden="true" class="icon-box">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24"><path d="M3 19h18M5 16l4-5 3 2 6-8"></path><path d="M15 5h3v3"></path><circle cx="9" cy="11" r="1"></circle><circle cx="12" cy="13" r="1"></circle></svg>
+</div>
+<span class="kicker">01 · Predictive Intelligence</span>
+<h3>Predictive AI &amp; Machine Learning</h3>
+<p lang="ko"><strong>데이터로 미래를 예측하고 의사결정을 지원합니다.</strong> 제조 현장의 자재 소요량 예측 모델을 개발하고 분석 업무를 리딩하여, 예측 결과가 발주와 재고 관리에 활용될 수 있도록 했습니다. 모델의 부진 재고 절감 가능성을 분석으로 입증하고, 확률적 예측과 운영 자동화를 통해 활용성을 높였습니다.</p>
+<p lang="ko"><strong>분석 모델을 실제 운영 환경으로 연결합니다.</strong> 수요예측·감성분석 모델을 기업용 AI 플랫폼으로 이관하고, 서버 이벤트 분류 모델을 개발해 불필요한 운영 업무를 줄이는 데 기여했습니다. 이후 프로젝트 관리와 클라우드 기반 운영 체계 구축을 맡고, 경쟁 입찰 사업의 제안 및 수주에도 참여했습니다.</p>
+<div class="tag-row"><span class="tag">Demand Forecasting</span><span class="tag">ML Operations</span><span class="tag">Probabilistic Forecasting</span><span class="tag">Operational Analytics</span></div>
+</article>
+<article class="card data-card">
+<div aria-hidden="true" class="icon-box">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24"><path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"></path><path d="m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"></path><path d="M3 3v4M1 5h4"></path></svg>
+</div>
+<span class="kicker">02 · AI-Driven Services</span>
+<h3>Generative AI &amp; AI Strategy</h3>
+<p lang="ko"><strong>데이터와 지식을 연결해 새로운 AI 서비스를 설계합니다.</strong> 통합안전관리 플랫폼 구축 사업에서 Project Leader로서 데이터 분석·예측 및 생성형 AI 서비스의 기획·설계를 총괄하고 있습니다. 온톨로지, 지식그래프, Hybrid RAG를 활용해 분산된 안전 데이터를 의사결정에 도움이 되는 지식으로 연결하는 체계를 설계하고 있습니다.</p>
+<p lang="ko"><strong>AI 전략을 실행 가능한 사업으로 구체화합니다.</strong> 현업의 요구사항을 AI 서비스 구조와 실행 계획으로 전환하고, 여러 기술 영역을 아우르는 프로젝트를 리딩합니다. 경쟁 입찰 제안과 사업 수주에 기여했으며, 현재 플랫폼과 AI 서비스의 설계·구축을 진행하고 있습니다.</p>
+<div class="tag-row"><span class="tag">Generative AI</span><span class="tag">Knowledge Graph</span><span class="tag">Hybrid RAG</span><span class="tag">AI Project Leadership</span></div>
+</article>
+</div>
+<div class="data-cv-link"><span lang="ko">프로젝트별 주요 업무, 적용 기술과 성과는 Projects에서 확인할 수 있습니다.</span><button data-jump="projects" type="button">프로젝트 자세히 보기 <span aria-hidden="true">↗</span></button></div>
+</section>
+<section class="page-panel" data-panel="projects" id="page-projects">
+<div class="section-head">
+<div>
+<span class="kicker">Selected Industry Work</span>
+<h2>Projects</h2>
+<p class="section-intro" lang="ko">삼성SDS에서 Data Scientist, Project Leader, Project Manager로 참여한 주요 산업 프로젝트를 수행 시기 역순으로 정리했습니다. 실제 수행 업무와 적용 기술, 검증된 성과를 중심으로 소개합니다.</p>
+</div>
+<span class="archive-label">발주처 및 세부 수치 비공개</span>
+</div>
+<div class="project-history" lang="ko">
+<article class="project-entry">
+<div class="project-year">2026–</div>
+<div class="project-entry-main">
+<div class="project-entry-top"><span class="project-status">진행 중</span><span class="project-dates">2026.04–현재 · 2028.03까지 예정</span></div>
+<h3>통합안전관리 플랫폼 구축</h3>
+<p class="project-role">국내 공공기관 · Project Leader (PL)</p>
+<p><strong>사업 개요</strong> 여러 안전관리 시스템의 데이터를 연계·수집하고, 현장 의사결정을 지원하는 통합 플랫폼을 구축하는 사업입니다.</p>
+<p><strong>주요 업무</strong> 데이터 분석·예측 및 생성형 AI 서비스의 기획·설계를 총괄하며, 데이터와 지식 기반 의사결정 지원 체계를 설계하고 있습니다.</p>
+<p><strong>주요 성과</strong> 경쟁 입찰 제안에 참여하여 사업 수주에 기여했습니다. 플랫폼 구축과 서비스 설계는 현재 진행 중입니다.</p>
+<div class="tag-row"><span class="tag">MLOps</span><span class="tag">Data Analytics</span><span class="tag">BI</span><span class="tag">Ontology</span><span class="tag">Knowledge Graph</span><span class="tag">Hybrid RAG</span><span class="tag">Generative AI</span></div>
+</div>
+</article>
+<article class="project-entry">
+<div class="project-year">2023–2025</div>
+<div class="project-entry-main">
+<div class="project-entry-top"><span class="project-dates">2023.01–2025.12</span></div>
+<h3>AI 기반 자재소요량 예측 분석 및 개선</h3>
+<p class="project-role">글로벌 제조사 · Data Scientist / 분석 PL → Project Manager</p>
+<p><strong>사업 개요</strong> 발주 및 재고 관리를 위한 단·중장기 자재 소요량 예측 모델을 개발하고, 예측·운영 업무를 자동화한 프로젝트입니다.</p>
+<p><strong>2023년 · Data Scientist / 분석 PL</strong> 자재 데이터 분석을 리딩하고, 머신러닝 및 통계 기반 수요예측 모델을 개발했습니다. 모델 적용 시 부진 재고를 크게 줄일 수 있다는 개선 효과를 분석으로 입증했습니다.</p>
+<p><strong>2024–2025년 · Project Manager</strong> 사업 제안·관리, 클라우드 시스템 구축 및 자동화, 확률적 예측과 시각화 고도화를 총괄했습니다. 경쟁 입찰의 제안 전략 수립과 발표를 수행하여 사업 수주에 기여했습니다.</p>
+<div class="tag-row"><span class="tag">Python</span><span class="tag">LightGBM</span><span class="tag">OLS</span><span class="tag">ARIMA</span><span class="tag">Brightics AI</span><span class="tag">Probabilistic Forecasting</span><span class="tag">MLOps</span><span class="tag">Cloud Automation</span></div>
+</div>
+</article>
+<article class="project-entry">
+<div class="project-year">2021–2022</div>
+<div class="project-entry-main">
+<div class="project-entry-top"><span class="project-dates">2021.08–2022.08</span></div>
+<h3>마케팅 분석 플랫폼 구축 (SMIP)</h3>
+<p class="project-role">글로벌 제조사 · Data Scientist</p>
+<p><strong>사업 개요</strong> 외부 시황 데이터의 수집·분석과 리포트 제공, 기존 분석·예측 모델의 통합 운영을 위한 플랫폼 구축 사업입니다.</p>
+<p><strong>주요 업무 및 성과</strong> 기존 Python 기반 수요예측·감성분석 모델을 Brightics AI 플랫폼으로 이관하여, 통합 분석 환경에서 모델을 운영할 수 있도록 지원했습니다.</p>
+<div class="tag-row"><span class="tag">Python</span><span class="tag">Brightics AI</span><span class="tag">MLOps</span><span class="tag">Demand Forecasting</span><span class="tag">Sentiment Analysis</span></div>
+</div>
+</article>
+<article class="project-entry">
+<div class="project-year">2021</div>
+<div class="project-entry-main">
+<div class="project-entry-top"><span class="project-dates">2021.04–2021.07</span></div>
+<h3>서버 이벤트 분석 및 필터링 모델 개발</h3>
+<p class="project-role">사내 IT 운영 · Data Scientist</p>
+<p><strong>사업 개요</strong> 서버 운영 중 발생하는 이벤트를 분석해 불필요한 알림을 분류·필터링하고, 운영 시스템에 연계한 과제입니다.</p>
+<p><strong>주요 업무 및 성과</strong> 서버 이벤트 데이터를 분석하고 Random Forest 기반 분류 모델을 개발·연계했습니다. 높은 분류 정확도를 확보하면서 불필요한 이벤트 검토를 줄여 운영 담당자의 업무 부담을 낮췄습니다.</p>
+<div class="tag-row"><span class="tag">SQL</span><span class="tag">Random Forest</span><span class="tag">Text Embedding</span><span class="tag">Brightics AI</span><span class="tag">Data Analytics</span></div>
+</div>
+</article>
+</div>
+<p class="note" lang="ko">공개용 포트폴리오이므로 발주처 실명, 계약 금액, 개별 시스템 수 및 성과율은 공개하지 않았습니다. 예측 모델의 재고 개선 효과는 실제 실현 수치가 아닌 분석으로 검증한 효과이며, 진행 중인 사업의 구축 완료 성과는 기재하지 않았습니다.</p>
+</section>
+<section class="page-panel" data-panel="astronomy" id="page-astronomy">
+<div class="section-head"><div><span class="kicker">Astronomy</span><h2>Galactic Supernova Remnants</h2><p class="section-intro">Supernova remnants reveal how stellar explosions create heavy elements and dust, and how their shocks interact with surrounding gas. Near-infrared spectra help trace ejecta, shock conditions, and their locations across our Galaxy.</p></div></div>
+<div class="grid-2">
+<article class="card">
+<div class="icon-box"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.8 4.8l3 3m8.4 8.4 3 3m0-14.4-3 3m-8.4 8.4-3 3"></path><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+<span class="kicker">01 · Young remnant</span><h3>Young Supernova Remnant: Cassiopeia A</h3>
+<p><strong>Inner iron ejecta and the explosion (2017).</strong> Near-infrared spectroscopy and PCA revealed Fe-rich knots with signatures of material synthesized deep inside the progenitor star. Their concentration near unshocked <sup>44</sup>Ti provides evidence of how inner stellar material was redistributed during the explosion. (<a href="https://ui.adsabs.harvard.edu/abs/2017ApJ...837..118L/abstract" rel="noopener" target="_blank">Lee et al. 2017</a>).</p><p><strong>Cool dust formed by the supernova (2015).</strong> Differences in extinction between approaching and receding ejecta revealed dust within the remnant itself. The absorption is linked to a cool dust component associated with dense ejecta, providing direct evidence of dust production in a supernova. (<a href="https://ui.adsabs.harvard.edu/abs/2015ApJ...808...98L/abstract" rel="noopener" target="_blank">Lee et al. 2015</a>).</p><div class="tag-row"><span class="tag">Inner Fe-rich ejecta</span><span class="tag">Explosion structure</span><span class="tag">Self-extinction</span><span class="tag">Cool supernova dust</span></div>
+</article>
+<article class="card">
+<div class="icon-box"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24"><path d="M3 18c3-8 6-12 9-12s6 4 9 12"></path><path d="M4 18h16M7 14c3 2 7 2 10 0M9 10c2 1 4 1 6 0"></path><circle cx="12" cy="6" r="2"></circle></svg></div>
+<span class="kicker">02 · Evolved remnants</span><h3>Evolved Supernova Remnants</h3>
+<p><strong>Shocks interacting with their surroundings (2019).</strong> A Galactic near-infrared survey revealed contrasting [Fe II] and H₂ emission structures, including molecular emission extending beyond the iron-emitting shells. These patterns illuminate how expanding supernova shocks interact with ionized and molecular gas. (<a href="https://ui.adsabs.harvard.edu/abs/2019AJ....157..123L/abstract" rel="noopener" target="_blank">Lee et al. 2019</a>).</p><p><strong>Locating remnants in the Galaxy (2020).</strong> Molecular hydrogen emission was shown to arise predominantly from shocked gas associated with the remnants. Its measured velocities yielded distances to 15 supernova remnants, helping establish their locations within the Milky Way. (<a href="https://ui.adsabs.harvard.edu/abs/2020AJ....160..263L/abstract" rel="noopener" target="_blank">Lee et al. 2020</a>).</p><div class="tag-row"><span class="tag">[Fe II] &amp; H₂ emission</span><span class="tag">Shock–ISM interaction</span><span class="tag">Molecular shocks</span><span class="tag">Galactic distances</span></div>
+</article>
+</div>
+</section>
+<section class="page-panel" data-panel="publications" id="page-publications">
+<div class="section-head"><div><span class="kicker">Selected work</span><h2>Publications</h2><p class="section-intro">Selected refereed publications, updated through 2026. New articles in AJ, ApJ, MNRAS, and PASJ have been added to the original archive list. Journal links open the corresponding ADS records.</p></div><a class="btn btn-primary" href="https://ui.adsabs.harvard.edu/search/filter_database_fq_database=AND&amp;filter_database_fq_database=database%3A%22astronomy%22&amp;fq=%7B!type%3Daqp%20v%3D%24fq_database%7D&amp;fq_database=(database%3A%22astronomy%22)&amp;q=%3Dauthor%3A%22Lee%2C%20Yong-Hyun%22%20OR%20(%3Dauthor%3A%22Lee%2C%20Y.-H.%22%20AND%20%3Ddatabase%3Aastronomy%20AND%20aff%3A%22Seoul%20National%20University%22)&amp;sort=date%20desc%2C%20bibcode%20desc&amp;p_=0" rel="noopener" target="_blank">Full list on ADS ↗</a></div>
+<div class="pub-list">
+<article class="list-card"><div class="year">2026</div><div><div class="meta">Jung, S.-H., Koo, B.-C., Lee, Y.-H., et al. · <a href="https://ui.adsabs.harvard.edu/abs/2026ApJ..1000...60J/abstract" rel="noopener" target="_blank">ApJ, 1000, 60</a></div><a class="pub-title" href="https://ui.adsabs.harvard.edu/abs/2026ApJ..1000...60J/abstract" rel="noopener" target="_blank">A Comparative Study of the Supernova Remnant Cassiopeia A from 2013 to 2020 Deep [Fe II] + [Si I] Images</a></div></article>
+<article class="list-card"><div class="year">2026</div><div><div class="meta">Kokusho, T., Katsurada, Y., Lee, Y.-H., et al. · <a href="https://ui.adsabs.harvard.edu/abs/2026PASJ...78..228K/abstract" rel="noopener" target="_blank">PASJ, 78, 228–241</a></div><a class="pub-title" href="https://ui.adsabs.harvard.edu/abs/2026PASJ...78..228K/abstract" rel="noopener" target="_blank">Near-infrared [P II] and [Fe II] line mapping of Galactic supernova remnants</a></div></article>
+<article class="list-card"><div class="year">2025</div><div><div class="meta">Aliste Castillo, R. L. S. E., Lee, Y.-H., Kokusho, T., et al. · <a href="https://ui.adsabs.harvard.edu/abs/2025AJ....169..227A/abstract" rel="noopener" target="_blank">AJ, 169, 227</a></div><a class="pub-title" href="https://ui.adsabs.harvard.edu/abs/2025AJ....169..227A/abstract" rel="noopener" target="_blank">Near-infrared [P II] and [Fe II] Emission-line Study of Supernova Remnants in the Magellanic Clouds</a></div></article>
+<article class="list-card"><div class="year">2024</div><div><div class="meta">Kim, Y., Koo, B.-C., Pyo, T.-S., et al. · <a href="https://ui.adsabs.harvard.edu/abs/2024MNRAS.528.4657K/abstract" rel="noopener" target="_blank">MNRAS, 528, 4657–4700</a></div><a class="pub-title" href="https://ui.adsabs.harvard.edu/abs/2024MNRAS.528.4657K/abstract" rel="noopener" target="_blank">Extended ionized Fe objects in the UWIFE survey</a></div></article>
+<article class="list-card"><div class="year">2023</div><div><div class="meta">Koo, B.-C., Lee, Y.-H., Lee, J.-J., &amp; Yoon, S.-C. · <a href="https://ui.adsabs.harvard.edu/abs/2023ApJ...953..131K/abstract" rel="noopener" target="_blank">ApJ, 953, 131</a></div><a class="pub-title" href="https://ui.adsabs.harvard.edu/abs/2023ApJ...953..131K/abstract" rel="noopener" target="_blank">Near-infrared Spectroscopy of Dense Ejecta Knots in the Outer Eastern Area of the Cassiopeia A Supernova Remnant</a></div></article>
+<article class="list-card"><div class="year">2022</div><div><div class="meta">Zhou, P., Zhang, G.-Y., Zhou, X., et al. · <a href="https://ui.adsabs.harvard.edu/abs/2022ApJ...931..144Z/abstract" rel="noopener" target="_blank">ApJ, 931, 144</a></div><a class="pub-title" href="https://ui.adsabs.harvard.edu/abs/2022ApJ...931..144Z/abstract" rel="noopener" target="_blank">Unusually High HCO+/CO Ratios in and outside Supernova Remnant W49B</a></div></article>
+<article class="list-card"><div class="year">2020</div><div><div class="meta">Lee, Y.-H., Koo, B.-C., Lee, J.-J. · <a href="https://ui.adsabs.harvard.edu/abs/2020AJ....160..263L/abstract" rel="noopener" target="_blank">AJ, 160, 263</a></div><a class="pub-title" href="https://ui.adsabs.harvard.edu/abs/2020AJ....160..263L/abstract" rel="noopener" target="_blank">High-resolution Near-infrared Spectroscopic Study of Galactic Supernova Remnants. I. Kinematic Distances</a></div></article>
+<article class="list-card"><div class="year">2020</div><div><div class="meta">Koo, B.-C., Kim, H.-J., Oh, H., et al. · <a href="https://doi.org/10.1038/s41550-019-0996-4" rel="noopener" target="_blank">Nature Astronomy, 4, 584–589</a></div><a class="pub-title" href="https://doi.org/10.1038/s41550-019-0996-4" rel="noopener" target="_blank">Detection of pristine circumstellar material from the Cassiopeia A supernova progenitor</a></div></article>
+<article class="list-card"><div class="year">2019</div><div><div class="meta">Lee, Y.-H., Koo, B.-C., Lee, J.-J., et al. · <a href="http://adsabs.harvard.edu/abs/2019AJ....157..123L" rel="noopener" target="_blank">AJ, 157, 123</a></div><a class="pub-title" href="http://adsabs.harvard.edu/abs/2019AJ....157..123L" rel="noopener" target="_blank">Near-infrared [Fe II] and H₂ Emission-line Study of Galactic Supernova Remnants in the First Quadrant</a></div></article>
+<article class="list-card"><div class="year">2018</div><div><div class="meta">Koo, B.-C., Kim, H.-J., Lee, Y.-H., et al. · <a href="http://adsabs.harvard.edu/abs/2018ApJ...866..139K" rel="noopener" target="_blank">ApJ, 866, 139</a></div><a class="pub-title" href="http://adsabs.harvard.edu/abs/2018ApJ...866..139K" rel="noopener" target="_blank">A Deep Near-Infrared [Fe II]+[Si I] Emission Line Image of the Supernova Remnant Cassiopeia A</a></div></article>
+<article class="list-card"><div class="year">2018</div><div><div class="meta">Raymond, J. C., Koo, B.-C., Lee, Y.-H., et al. · <a href="http://adsabs.harvard.edu/abs/2018ApJ...866..128R" rel="noopener" target="_blank">ApJ, 866, 128</a></div><a class="pub-title" href="http://adsabs.harvard.edu/abs/2018ApJ...866..128R" rel="noopener" target="_blank">The Temperature and Ionization of Unshocked Ejecta in Cas A</a></div></article>
+<article class="list-card"><div class="year">2017</div><div><div class="meta">Lee, Y.-H., Koo, B.-C., Moon, D.-S., et al. · <a href="http://adsabs.harvard.edu/abs/2017ApJ...837..118L" rel="noopener" target="_blank">ApJ, 837, 118</a></div><a class="pub-title" href="http://adsabs.harvard.edu/abs/2017ApJ...837..118L" rel="noopener" target="_blank">Near-Infrared Knots and Dense Fe Ejecta in the Cassiopeia A Supernova Remnant</a></div></article>
+<article class="list-card"><div class="year">2015</div><div><div class="meta">Lee, Y.-H., Koo, B.-C., Moon, D.-S., et al. · <a href="http://adsabs.harvard.edu/abs/2015ApJ...808...98L" rel="noopener" target="_blank">ApJ, 808, 98</a></div><a class="pub-title" href="http://adsabs.harvard.edu/abs/2015ApJ...808...98L" rel="noopener" target="_blank">Near-infrared Extinction due to Cool Supernova Dust in Cassiopeia A</a></div></article>
+<article class="list-card"><div class="year">2013</div><div><div class="meta">Koo, B.-C., Lee, Y.-H., Moon, D.-S., et al. · <a href="http://adsabs.harvard.edu/abs/2013Sci...342.1346K" rel="noopener" target="_blank">Science, 342, 1346</a></div><a class="pub-title" href="http://adsabs.harvard.edu/abs/2013Sci...342.1346K" rel="noopener" target="_blank">Phosphorus in the Young Supernova Remnant Cassiopeia A</a></div></article>
+</div>
+<p class="note">Selected refereed publications. Articles published since 2022 are included for AJ, ApJ, MNRAS and PASJ only; earlier entries are preserved from the original website. View the complete list on NASA ADS.</p>
+</section>
+<section class="page-panel" data-panel="cv" id="page-cv">
+<div class="section-head">
+<div>
+<span class="kicker">Curriculum Vitae</span>
+<h2>Experience &amp; Education</h2>
+<p class="section-intro">A concise timeline of my professional roles and academic background. Detailed industrial work is listed under <button class="inline-nav" data-jump="projects" type="button">Projects ↗</button>, while scientific papers appear in <button class="inline-nav" data-jump="publications" type="button">Publications ↗</button>.</p>
+</div>
+</div>
+<div class="cv-grid cv-simple">
+<section aria-labelledby="cv-experience-title" class="cv-block">
+<h3 id="cv-experience-title">Professional Experience</h3>
+<div class="cv-item"><strong>Samsung SDS</strong><span>Apr 2021 – Present · Data Scientist / Project Leader / Project Manager</span></div>
+<div class="cv-item"><strong>Korea Astronomy and Space Science Institute</strong><span>Sep 2019 – Jan 2021 · Postdoctoral Researcher</span></div>
+<div class="cv-item"><strong>Seoul National University · Research Institute of Basic Science</strong><span>Sep 2017 – Aug 2019 · Postdoctoral Researcher</span></div>
+</section>
+<section aria-labelledby="cv-education-title" class="cv-block">
+<h3 id="cv-education-title">Education</h3>
+<div class="cv-item"><strong>Ph.D. in Astronomy · Seoul National University</strong><span>Mar 2011 – Aug 2017</span></div>
+<div class="cv-item"><strong>M.S. · Seoul National University</strong><span>Sep 2008 – Feb 2011</span></div>
+<div class="cv-item"><strong>B.S. · Chungnam National University</strong><span>Mar 2002 – Feb 2006</span></div>
+</section>
+</div>
+</section>
+
+
+</main>
+<footer><span>© 2026 Yong-Hyun Lee · Personal website</span><span>Astronomy · Data Science · AI</span></footer>
+</div>
+<script>
+  // All content is embedded in this HTML file. No server or build step is required.
+  const pages = ['main', 'data-science', 'projects', 'astronomy', 'publications', 'cv'];
+  const pageButtons = [...document.querySelectorAll('[data-page]')];
+  const panels = [...document.querySelectorAll('[data-panel]')];
+
+  function showPage(page, updateUrl = false) {
+    if (!pages.includes(page)) page = 'main';
+    panels.forEach(panel => panel.classList.toggle('active', panel.dataset.panel === page));
+    pageButtons.forEach(button => {
+      if (button.dataset.page === page) button.setAttribute('aria-current', 'page');
+      else button.removeAttribute('aria-current');
+    });
+    if (updateUrl) {
+      // Hash URLs are shareable; history.replaceState avoids adding one history entry per tab.
+      history.replaceState(null, '', '#' + page);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  pageButtons.forEach(button => button.addEventListener('click', () => showPage(button.dataset.page, true)));
+  document.querySelectorAll('[data-jump]').forEach(button => button.addEventListener('click', () => showPage(button.dataset.jump, true)));
+  document.querySelectorAll('[data-go]').forEach(link => link.addEventListener('click', event => {
+    event.preventDefault();
+    showPage('main', true);
+  }));
+  window.addEventListener('hashchange', () => {
+    const value = location.hash.slice(1);
+    showPage(value === 'research' ? 'astronomy' : value === 'home' ? 'main' : value);
+  });
+  const initialPage = location.hash.slice(1);
+  showPage(initialPage === 'research' ? 'astronomy' : initialPage === 'home' ? 'main' : initialPage);
+</script>
+</body>
+</html>
