@@ -227,6 +227,38 @@
       text-transform: uppercase;
       color: var(--accent);
     }
+    .intro-language-switch {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 24px;
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 16px;
+      background: rgba(14,23,34,.34);
+    }
+    .intro-language-switch[hidden] { display: none; }
+    .intro-language-switch button {
+      min-height: 44px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 11px;
+      background: transparent;
+      color: #f5f7fb;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .intro-language-switch button:hover { background: rgba(255,255,255,.12); }
+    .intro-language-switch button[aria-pressed="true"] { background: #f0bd9d; color: #172432; }
+    .intro-language-switch button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .intro-language-switch:not([hidden]) ~ .biography .language-label { display: none; }
+    .biography:not([hidden]) + .biography:not([hidden]) {
+      margin-top: 44px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(255,255,255,.19);
+    }
     .biography p {
       margin: 0 0 22px;
       font-size: 14px;
@@ -535,14 +567,17 @@
 <p class="main-subtitle">Data Scientist | Former Astronomer | PhD in Astronomy</p>
 </div>
 <hr class="soft-rule"/>
-<div class="biography biography-ko" lang="ko">
+<div aria-label="Introduction language" class="intro-language-switch" id="intro-language-switch" role="group" hidden>
+<button aria-controls="intro-ko" aria-pressed="true" lang="ko" type="button">한국어</button>
+<button aria-controls="intro-en" aria-pressed="false" lang="en" type="button">English</button>
+</div>
+<div class="biography biography-ko" id="intro-ko" lang="ko">
 <span class="language-label">소개 · 한국어</span>
 <p>저는 <strong>우주를 탐구하고 그 원리를 이해하고자 했던 천문학자였고, 이제는 데이터 속에 숨겨진 가능성을 발견하고 현실의 변화로 만들어가는 Data Scientist입니다.</strong></p>
 <p>어린 시절부터 밤하늘 너머의 세상이 궁금했습니다. 중·고등학교 시절, 우주를 향한 막연한 호기심은 어느새 천문학자가 되고 싶다는 꿈으로 자라났습니다. 그 꿈을 따라 대학에서 천문학을 공부하며 우주의 수많은 현상과 그 속에 숨은 원리를 알아갔고, 더 깊은 질문의 답을 찾기 위해 대학원으로 향했습니다. 그곳에서 저는 우주에서 가장 격렬하고 찬란한 순간인 <strong>초신성 폭발</strong>, 그리고 폭발이 남긴 흔적인 <strong>초신성잔해</strong>에 매료되었습니다. 별이 마지막 순간에 남긴 이야기를 관측과 데이터로 읽어내며 우주의 비밀을 탐구했고, 그 여정은 14편의 학술 논문으로 이어졌습니다.</p>
 <p>우주의 비밀을 탐구하는 과정에서 저는 또 다른 가능성을 발견했습니다. 수많은 천문 관측 데이터 속에서 보이지 않던 현상을 찾아내고 의미를 발견하는 경험은, <strong>데이터가 세상을 이해하고 변화시킬 수 있는 강력한 도구</strong>라는 사실을 깨닫게 해주었습니다. 그렇게 별을 연구하던 천문학자에서 데이터로 현실의 문제를 풀어가는 Data Scientist로 새로운 여정을 시작했습니다. 산업 현장의 복잡한 데이터 속에서 미래의 흐름을 예측하는 AI 모델을 개발하고 운영하며, 데이터가 불확실한 미래를 이해하고 더 나은 의사결정으로 이끄는 힘을 경험했습니다. 이제는 그 경험을 바탕으로 생성형 AI가 열어가는 새로운 가능성에 주목하며, 다양한 AI 서비스의 전략을 구상하고 프로젝트를 이끌고 있습니다. <strong>우주에서 시작된 저의 호기심은 이제 데이터와 AI를 통해 더 나은 미래를 그려가는 원동력이 되고 있습니다.</strong></p>
 </div>
-<hr class="soft-rule"/>
-<div class="biography" lang="en">
+<div class="biography" id="intro-en" lang="en">
 <span class="language-label">Introduction · English</span>
 <p>I began my journey as an astronomer, seeking to explore the universe and understand the principles that govern it. Today, I am a <strong>Data Scientist, uncovering the hidden potential of data and turning insights into meaningful change.</strong></p>
 <p>My fascination with the universe began long before I became a scientist. Throughout my middle and high school years, a simple curiosity about the night sky gradually grew into a dream of becoming an astronomer. Following that dream, I studied astronomy at university, where every discovery deepened my curiosity and inspired me to pursue graduate research. There, I became captivated by <strong>supernovae—among the most powerful and spectacular explosions in the universe—and the remnants they leave behind.</strong> Through observations and data, I sought to uncover the stories written in the final moments of stars. This journey of exploration and discovery led to 14 scientific publications.</p>
@@ -734,6 +769,21 @@
   const pages = ['main', 'data-science', 'projects', 'astronomy', 'publications', 'cv'];
   const pageButtons = [...document.querySelectorAll('[data-page]')];
   const panels = [...document.querySelectorAll('[data-panel]')];
+
+  const introLanguageSwitch = document.getElementById('intro-language-switch');
+  const introLanguageButtons = [...introLanguageSwitch.querySelectorAll('button')];
+
+  function showIntroLanguage(selectedButton) {
+    introLanguageButtons.forEach(button => {
+      const isSelected = button === selectedButton;
+      button.setAttribute('aria-pressed', String(isSelected));
+      document.getElementById(button.getAttribute('aria-controls')).hidden = !isSelected;
+    });
+  }
+
+  introLanguageButtons.forEach(button => button.addEventListener('click', () => showIntroLanguage(button)));
+  showIntroLanguage(introLanguageButtons[0]);
+  introLanguageSwitch.hidden = false;
 
   function showPage(page, updateUrl = false) {
     if (!pages.includes(page)) page = 'main';
