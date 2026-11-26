@@ -111,6 +111,7 @@
     .list-card p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
     .list-card .meta { font-size: 11px; color: var(--muted); margin-bottom: 5px; letter-spacing: .035em; }
     .pub-list { border-bottom: 1px solid var(--line); }
+    .pub-list .meta { margin: 5px 0 0; }
     .pub-title { color: var(--text); font-weight: 700; text-decoration: none; }
     .pub-title:hover { color: var(--accent-deep); }
     .pill { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 4px 8px; color: var(--muted); font-size: 10px; font-weight: 750; margin-left: 7px; }
@@ -183,6 +184,12 @@
       pointer-events: none;
       background: linear-gradient(90deg, rgba(15,23,33,.21), transparent 72%);
     }
+    .main-intro-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px 24px;
+    }
     .main-identity {
       padding: 0 0 2px;
     }
@@ -190,7 +197,7 @@
     .main-name {
       margin: 0 0 12px;
       max-width: none;
-      font-size: clamp(37px, 5.4vw, 64px);
+      font-size: clamp(28px, 3.3vw, 40px);
       line-height: 1.14;
       letter-spacing: -.05em;
       font-weight: 760;
@@ -229,9 +236,8 @@
     }
     .intro-language-switch {
       display: inline-flex;
-      flex-wrap: wrap;
+      flex: none;
       gap: 4px;
-      margin-bottom: 24px;
       padding: 4px;
       border: 1px solid rgba(255,255,255,.24);
       border-radius: 16px;
@@ -253,7 +259,7 @@
     .intro-language-switch button:hover { background: rgba(255,255,255,.12); }
     .intro-language-switch button[aria-pressed="true"] { background: #f0bd9d; color: #172432; }
     .intro-language-switch button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-    .intro-language-switch:not([hidden]) ~ .biography .language-label { display: none; }
+    .main-intro-head:has(> .intro-language-switch:not([hidden])) ~ .biography .language-label { display: none; }
     .biography:not([hidden]) + .biography:not([hidden]) {
       margin-top: 44px;
       padding-top: 36px;
@@ -294,11 +300,14 @@
     @media (max-width: 780px) {
       .main-intro::before { width: 660px; right: -240px; top: 100px; opacity: .23; }
       .main-intro { margin: 8px auto 0; padding: 28px 23px 34px; border-radius: 18px; }
-      .main-name { font-size: clamp(34px, 7.8vw, 48px); }
       .main-name span { font-size: .64em; }
       .main-subtitle { font-size: 11px; }
       .soft-rule { margin: 30px 0 27px; }
       .biography p { line-height: 1.94; }
+    }
+    @media (max-width: 600px) {
+      .main-intro-head { flex-direction: column; }
+      .intro-language-switch { order: -1; align-self: flex-end; }
     }
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
@@ -501,33 +510,22 @@
       letter-spacing: .02em;
     }
     .project-entry-main { min-width: 0; }
-    .project-entry-top {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 9px;
-    }
-    .project-dates { color: var(--muted); font-size: 12px; }
-    .project-status {
-      color: var(--accent-deep);
-      border: 1px solid var(--line);
-      border-radius: 99px;
-      padding: 2px 9px;
-      font-weight: 800;
-      font-size: 10px;
-    }
     .project-entry h3 { font-size: clamp(18px, 2vw, 23px); margin: 0 0 4px; }
-    .project-role { margin: 0 0 13px !important; color: var(--accent-deep) !important; font-weight: 700; font-size: 12px !important; }
-    .project-entry-main p {
+    .project-role { margin: 0 0 13px; color: var(--accent-deep); font-weight: 700; font-size: 12px; }
+    .project-details {
+      display: grid;
+      gap: 9px;
+      margin: 0;
       font-size: 13px;
       line-height: 1.9;
-      margin: 9px 0;
       color: var(--muted);
       word-break: keep-all;
       overflow-wrap: break-word;
     }
-    .project-entry-main p strong { color: var(--text); font-weight: 800; }
+    .project-details > div { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; }
+    .project-details dt, .project-details strong { color: var(--text); font-weight: 800; }
+    .project-details dd, .project-details p { margin: 0; }
+    .project-details p + p { margin-top: 5px; }
     .project-entry .tag-row { margin-top: 16px; }
     .cv-simple .cv-block { margin-bottom: 8px; }
     .cv-simple .cv-item { padding: 17px 0; }
@@ -537,6 +535,9 @@
       .project-entry { grid-template-columns: 1fr; gap: 2px; padding: 22px 0 25px; }
       .project-year { padding-top: 0; }
       .cv-quicklink { margin-top: 12px; }
+    }
+    @media (max-width: 600px) {
+      .project-details > div { grid-template-columns: 1fr; gap: 2px; }
     }
 </style>
 <meta content="Yong-Hyun Lee (이용현) — Data Scientist and former astronomer. Selected industry projects, research on supernova remnants, publications, and career background." name="description"/></head>
@@ -562,15 +563,17 @@
 <main class="main">
 <section class="page-panel active" data-panel="main" id="page-main">
 <div class="main-intro">
+<div class="main-intro-head">
 <div class="main-identity">
 <h1 class="main-name">Yong-Hyun Lee <span lang="ko">(이용현)</span></h1>
 <p class="main-subtitle">Data Scientist | Former Astronomer | PhD in Astronomy</p>
 </div>
-<hr class="soft-rule"/>
 <div aria-label="Introduction language" class="intro-language-switch" id="intro-language-switch" role="group" hidden>
 <button aria-controls="intro-ko" aria-pressed="true" lang="ko" type="button">한국어</button>
 <button aria-controls="intro-en" aria-pressed="false" lang="en" type="button">English</button>
 </div>
+</div>
+<hr class="soft-rule"/>
 <div class="biography biography-ko" id="intro-ko" lang="ko">
 <span class="language-label">소개 · 한국어</span>
 <p>저는 <strong>우주를 탐구하고 그 원리를 이해하고자 했던 천문학자였고, 이제는 데이터 속에 숨겨진 가능성을 발견하고 현실의 변화로 만들어가는 Data Scientist입니다.</strong></p>
@@ -653,53 +656,62 @@
 </div>
 <div class="project-history" lang="ko">
 <article class="project-entry">
-<div class="project-year">2026–</div>
+<div class="project-year">2026-현재</div>
 <div class="project-entry-main">
-<div class="project-entry-top"><span class="project-status">진행 중</span><span class="project-dates">2026.04–현재 · 2028.03까지 예정</span></div>
 <h3>통합안전관리 플랫폼 구축</h3>
 <p class="project-role">국내 공공기관 · Project Leader (PL)</p>
-<p><strong>사업 개요</strong> 여러 안전관리 시스템의 데이터를 연계·수집하고, 현장 의사결정을 지원하는 통합 플랫폼을 구축하는 사업입니다.</p>
-<p><strong>주요 업무</strong> 데이터 분석·예측 및 생성형 AI 서비스의 기획·설계를 총괄하며, 데이터와 지식 기반 의사결정 지원 체계를 설계하고 있습니다.</p>
-<p><strong>주요 성과</strong> 경쟁 입찰 제안에 참여하여 사업 수주에 기여했습니다. 플랫폼 구축과 서비스 설계는 현재 진행 중입니다.</p>
+<dl class="project-details">
+  <div><dt>사업 개요</dt><dd>여러 안전관리 시스템의 데이터를 한곳에 모아 현장 의사결정을 지원하는 통합 플랫폼 구축 사업입니다.</dd></div>
+  <div><dt>주요 업무</dt><dd>PL로서 데이터 분석·예측과 생성형 AI 서비스의 기획·설계를 총괄하고, 데이터와 지식 기반의 의사결정 지원 체계를 설계하고 있습니다.</dd></div>
+  <div><dt>주요 성과</dt><dd>경쟁 입찰 제안에 참여해 사업 수주에 기여했습니다.</dd></div>
+</dl>
 <div class="tag-row"><span class="tag">MLOps</span><span class="tag">Data Analytics</span><span class="tag">BI</span><span class="tag">Ontology</span><span class="tag">Knowledge Graph</span><span class="tag">Hybrid RAG</span><span class="tag">Generative AI</span></div>
 </div>
 </article>
 <article class="project-entry">
 <div class="project-year">2023–2025</div>
 <div class="project-entry-main">
-<div class="project-entry-top"><span class="project-dates">2023.01–2025.12</span></div>
 <h3>AI 기반 자재소요량 예측 분석 및 개선</h3>
-<p class="project-role">글로벌 제조사 · Data Scientist / 분석 PL → Project Manager</p>
-<p><strong>사업 개요</strong> 발주 및 재고 관리를 위한 단·중장기 자재 소요량 예측 모델을 개발하고, 예측·운영 업무를 자동화한 프로젝트입니다.</p>
-<p><strong>2023년 · Data Scientist / 분석 PL</strong> 자재 데이터 분석을 리딩하고, 머신러닝 및 통계 기반 수요예측 모델을 개발했습니다. 모델 적용 시 부진 재고를 크게 줄일 수 있다는 개선 효과를 분석으로 입증했습니다.</p>
-<p><strong>2024–2025년 · Project Manager</strong> 사업 제안·관리, 클라우드 시스템 구축 및 자동화, 확률적 예측과 시각화 고도화를 총괄했습니다. 경쟁 입찰의 제안 전략 수립과 발표를 수행하여 사업 수주에 기여했습니다.</p>
+<p class="project-role">글로벌 제조사 · Data Scientist</p>
+<dl class="project-details">
+  <div><dt>사업 개요</dt><dd>제조사의 발주와 재고 관리를 지원하기 위해 단기·중장기 자재 소요량을 예측하고 모델 운영을 자동화한 사업입니다.</dd></div>
+  <div><dt>주요 업무</dt><dd>
+    <p><strong>Data Scientist</strong> 자재 데이터 분석을 이끌고 머신러닝·통계 기반 예측 모델을 개발했습니다.</p>
+    <p><strong>Project Manager</strong> 사업 제안과 수행 관리를 맡고, 클라우드 운영 환경 구축·자동화와 확률적 예측 및 결과 시각화 고도화를 총괄했습니다.</p>
+  </dd></div>
+  <div><dt>주요 성과</dt><dd>모델 적용 시 부진 재고를 줄일 수 있음을 분석으로 확인했습니다. 경쟁 입찰의 제안 전략을 수립하고 발표를 맡아 사업 수주에 기여했습니다.</dd></div>
+</dl>
 <div class="tag-row"><span class="tag">Python</span><span class="tag">LightGBM</span><span class="tag">OLS</span><span class="tag">ARIMA</span><span class="tag">Brightics AI</span><span class="tag">Probabilistic Forecasting</span><span class="tag">MLOps</span><span class="tag">Cloud Automation</span></div>
 </div>
 </article>
 <article class="project-entry">
 <div class="project-year">2021–2022</div>
 <div class="project-entry-main">
-<div class="project-entry-top"><span class="project-dates">2021.08–2022.08</span></div>
 <h3>마케팅 분석 플랫폼 구축 (SMIP)</h3>
 <p class="project-role">글로벌 제조사 · Data Scientist</p>
-<p><strong>사업 개요</strong> 외부 시황 데이터의 수집·분석과 리포트 제공, 기존 분석·예측 모델의 통합 운영을 위한 플랫폼 구축 사업입니다.</p>
-<p><strong>주요 업무 및 성과</strong> 기존 Python 기반 수요예측·감성분석 모델을 Brightics AI 플랫폼으로 이관하여, 통합 분석 환경에서 모델을 운영할 수 있도록 지원했습니다.</p>
+<dl class="project-details">
+  <div><dt>사업 개요</dt><dd>외부 시황 데이터를 수집·분석해 리포트를 제공하고 기존 분석·예측 모델을 한곳에서 운영하는 플랫폼 구축 사업입니다.</dd></div>
+  <div><dt>주요 업무</dt><dd>기존 Python 기반 수요예측·감성분석 모델을 Brightics AI 플랫폼으로 이관했습니다.</dd></div>
+  <div><dt>주요 성과</dt><dd>이관한 모델을 통합 분석 환경에서 운영할 수 있도록 지원했습니다.</dd></div>
+</dl>
 <div class="tag-row"><span class="tag">Python</span><span class="tag">Brightics AI</span><span class="tag">MLOps</span><span class="tag">Demand Forecasting</span><span class="tag">Sentiment Analysis</span></div>
 </div>
 </article>
 <article class="project-entry">
 <div class="project-year">2021</div>
 <div class="project-entry-main">
-<div class="project-entry-top"><span class="project-dates">2021.04–2021.07</span></div>
 <h3>서버 이벤트 분석 및 필터링 모델 개발</h3>
 <p class="project-role">사내 IT 운영 · Data Scientist</p>
-<p><strong>사업 개요</strong> 서버 운영 중 발생하는 이벤트를 분석해 불필요한 알림을 분류·필터링하고, 운영 시스템에 연계한 과제입니다.</p>
-<p><strong>주요 업무 및 성과</strong> 서버 이벤트 데이터를 분석하고 Random Forest 기반 분류 모델을 개발·연계했습니다. 높은 분류 정확도를 확보하면서 불필요한 이벤트 검토를 줄여 운영 담당자의 업무 부담을 낮췄습니다.</p>
+<dl class="project-details">
+  <div><dt>사업 개요</dt><dd>서버 운영 중 발생하는 이벤트 가운데 검토가 불필요한 알림을 걸러내는 과제입니다.</dd></div>
+  <div><dt>주요 업무</dt><dd>서버 이벤트 데이터를 분석하고 Random Forest 기반 분류 모델을 개발해 운영 시스템에 연계했습니다.</dd></div>
+  <div><dt>주요 성과</dt><dd>높은 분류 정확도를 확보하고 담당자가 검토해야 하는 이벤트를 줄여 운영 부담을 낮췄습니다.</dd></div>
+</dl>
 <div class="tag-row"><span class="tag">SQL</span><span class="tag">Random Forest</span><span class="tag">Text Embedding</span><span class="tag">Brightics AI</span><span class="tag">Data Analytics</span></div>
 </div>
 </article>
 </div>
-<p class="note" lang="ko">공개용 포트폴리오이므로 발주처 실명, 계약 금액, 개별 시스템 수 및 성과율은 공개하지 않았습니다. 예측 모델의 재고 개선 효과는 실제 실현 수치가 아닌 분석으로 검증한 효과이며, 진행 중인 사업의 구축 완료 성과는 기재하지 않았습니다.</p>
+<p class="note" lang="ko">공개용 포트폴리오이므로 발주처 실명, 계약 금액, 개별 시스템 수 및 성과율은 공개하지 않았습니다. 예측 모델의 재고 개선 효과는 실제 실현 수치가 아닌 분석으로 검증한 효과입니다.</p>
 </section>
 <section class="page-panel" data-panel="astronomy" id="page-astronomy">
 <div class="section-head"><div><span class="kicker">Astronomy</span><h2>Galactic Supernova Remnants</h2><p class="section-intro">Supernova remnants reveal how stellar explosions create heavy elements and dust, and how their shocks interact with surrounding gas. Near-infrared spectra help trace ejecta, shock conditions, and their locations across our Galaxy.</p></div></div>
@@ -707,39 +719,39 @@
 <article class="card">
 <div class="icon-box"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.8 4.8l3 3m8.4 8.4 3 3m0-14.4-3 3m-8.4 8.4-3 3"></path><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
 <span class="kicker">01 · Young remnant</span><h3>Young Supernova Remnant: Cassiopeia A</h3>
-<p><strong>Inner iron ejecta and the explosion (2017).</strong> Near-infrared spectroscopy and PCA revealed Fe-rich knots with signatures of material synthesized deep inside the progenitor star. Their concentration near unshocked <sup>44</sup>Ti provides evidence of how inner stellar material was redistributed during the explosion. (<a href="https://ui.adsabs.harvard.edu/abs/2017ApJ...837..118L/abstract" rel="noopener" target="_blank">Lee et al. 2017</a>).</p><p><strong>Cool dust formed by the supernova (2015).</strong> Differences in extinction between approaching and receding ejecta revealed dust within the remnant itself. The absorption is linked to a cool dust component associated with dense ejecta, providing direct evidence of dust production in a supernova. (<a href="https://ui.adsabs.harvard.edu/abs/2015ApJ...808...98L/abstract" rel="noopener" target="_blank">Lee et al. 2015</a>).</p><div class="tag-row"><span class="tag">Inner Fe-rich ejecta</span><span class="tag">Explosion structure</span><span class="tag">Self-extinction</span><span class="tag">Cool supernova dust</span></div>
+<p><strong>Inner iron ejecta and the explosion (2017).</strong> Near-infrared spectroscopy and PCA revealed Fe-rich knots with signatures of material synthesized deep inside the progenitor star. Their concentration near unshocked <sup>44</sup>Ti provides evidence of how inner stellar material was redistributed during the explosion. (<a href="https://scixplorer.org/abs/2017ApJ...837..118L/abstract" rel="noopener" target="_blank">Lee et al. 2017</a>).</p><p><strong>Cool dust formed by the supernova (2015).</strong> Differences in extinction between approaching and receding ejecta revealed dust within the remnant itself. The absorption is linked to a cool dust component associated with dense ejecta, providing direct evidence of dust production in a supernova. (<a href="https://scixplorer.org/abs/2015ApJ...808...98L/abstract" rel="noopener" target="_blank">Lee et al. 2015</a>).</p><div class="tag-row"><span class="tag">Inner Fe-rich ejecta</span><span class="tag">Explosion structure</span><span class="tag">Self-extinction</span><span class="tag">Cool supernova dust</span></div>
 </article>
 <article class="card">
 <div class="icon-box"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24"><path d="M3 18c3-8 6-12 9-12s6 4 9 12"></path><path d="M4 18h16M7 14c3 2 7 2 10 0M9 10c2 1 4 1 6 0"></path><circle cx="12" cy="6" r="2"></circle></svg></div>
 <span class="kicker">02 · Evolved remnants</span><h3>Evolved Supernova Remnants</h3>
-<p><strong>Shocks interacting with their surroundings (2019).</strong> A Galactic near-infrared survey revealed contrasting [Fe II] and H₂ emission structures, including molecular emission extending beyond the iron-emitting shells. These patterns illuminate how expanding supernova shocks interact with ionized and molecular gas. (<a href="https://ui.adsabs.harvard.edu/abs/2019AJ....157..123L/abstract" rel="noopener" target="_blank">Lee et al. 2019</a>).</p><p><strong>Locating remnants in the Galaxy (2020).</strong> Molecular hydrogen emission was shown to arise predominantly from shocked gas associated with the remnants. Its measured velocities yielded distances to 15 supernova remnants, helping establish their locations within the Milky Way. (<a href="https://ui.adsabs.harvard.edu/abs/2020AJ....160..263L/abstract" rel="noopener" target="_blank">Lee et al. 2020</a>).</p><div class="tag-row"><span class="tag">[Fe II] &amp; H₂ emission</span><span class="tag">Shock–ISM interaction</span><span class="tag">Molecular shocks</span><span class="tag">Galactic distances</span></div>
+<p><strong>Shocks interacting with their surroundings (2019).</strong> A Galactic near-infrared survey revealed contrasting [Fe II] and H₂ emission structures, including molecular emission extending beyond the iron-emitting shells. These patterns illuminate how expanding supernova shocks interact with ionized and molecular gas. (<a href="https://scixplorer.org/abs/2019AJ....157..123L/abstract" rel="noopener" target="_blank">Lee et al. 2019</a>).</p><p><strong>Locating remnants in the Galaxy (2020).</strong> Molecular hydrogen emission was shown to arise predominantly from shocked gas associated with the remnants. Its measured velocities yielded distances to 15 supernova remnants, helping establish their locations within the Milky Way. (<a href="https://scixplorer.org/abs/2020AJ....160..263L/abstract" rel="noopener" target="_blank">Lee et al. 2020</a>).</p><div class="tag-row"><span class="tag">[Fe II] &amp; H₂ emission</span><span class="tag">Shock–ISM interaction</span><span class="tag">Molecular shocks</span><span class="tag">Galactic distances</span></div>
 </article>
 </div>
 </section>
 <section class="page-panel" data-panel="publications" id="page-publications">
 <div class="section-head"><div><span class="kicker">Selected work</span><h2>Publications</h2><p class="section-intro">Selected peer-reviewed journal articles, listed from newest to oldest. Links lead to the corresponding article on SciX or the publisher’s website.</p></div><a class="btn btn-primary" href="https://scixplorer.org/search?filter_database_fq_database=AND&amp;filter_database_fq_database=database%3A%22astronomy%22&amp;fq=%7B%21type%3Daqp+v%3D%24fq_database%7D&amp;fq_database=%28database%3A%22astronomy%22%29&amp;q=%3Dauthor%3A%22Lee%2C+Yong-Hyun%22+OR+%28%3Dauthor%3A%22Lee%2C+Y.-H.%22+AND+%3Ddatabase%3Aastronomy+AND+aff%3A%22Seoul+National+University%22%29&amp;sort=date+desc%2C+bibcode+desc&amp;p_=0&amp;fromADS=True&amp;ads_compat=1&amp;d=general" rel="noopener" target="_blank">View search results on SciX</a></div>
 <div class="pub-list">
-<article class="list-card"><div class="year">2026</div><div><div class="meta">Jung, S.-H., Koo, B.-C., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2026ApJ..1000...60J/abstract" rel="noopener" target="_blank">ApJ, 1000, 60</a></div><a class="pub-title" href="https://scixplorer.org/abs/2026ApJ..1000...60J/abstract" rel="noopener" target="_blank">A Comparative Study of the Supernova Remnant Cassiopeia A from 2013 to 2020 Deep [Fe II] + [Si I] Images</a></div></article>
-<article class="list-card"><div class="year">2026</div><div><div class="meta">Kokusho, T., Katsurada, Y., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2026PASJ...78..228K/abstract" rel="noopener" target="_blank">PASJ, 78, 228–241</a></div><a class="pub-title" href="https://scixplorer.org/abs/2026PASJ...78..228K/abstract" rel="noopener" target="_blank">Near-infrared [P II] and [Fe II] line mapping of Galactic supernova remnants</a></div></article>
-<article class="list-card"><div class="year">2025</div><div><div class="meta">Aliste Castillo, R. L. S. E., Lee, Y.-H., Kokusho, T., et al. · <a href="https://scixplorer.org/abs/2025AJ....169..227A/abstract" rel="noopener" target="_blank">AJ, 169, 227</a></div><a class="pub-title" href="https://scixplorer.org/abs/2025AJ....169..227A/abstract" rel="noopener" target="_blank">Near-infrared [P II] and [Fe II] Emission-line Study of Supernova Remnants in the Magellanic Clouds</a></div></article>
-<article class="list-card"><div class="year">2024</div><div><div class="meta">Kim, Y., Koo, B.-C., Pyo, T.-S., et al. · <a href="https://scixplorer.org/abs/2024MNRAS.528.4657K/abstract" rel="noopener" target="_blank">MNRAS, 528, 4657–4700</a></div><a class="pub-title" href="https://scixplorer.org/abs/2024MNRAS.528.4657K/abstract" rel="noopener" target="_blank">Extended ionized Fe objects in the UWIFE survey</a></div></article>
-<article class="list-card"><div class="year">2023</div><div><div class="meta">Koo, B.-C., Lee, Y.-H., Lee, J.-J., &amp; Yoon, S.-C. · <a href="https://scixplorer.org/abs/2023ApJ...953..131K/abstract" rel="noopener" target="_blank">ApJ, 953, 131</a></div><a class="pub-title" href="https://scixplorer.org/abs/2023ApJ...953..131K/abstract" rel="noopener" target="_blank">Near-infrared Spectroscopy of Dense Ejecta Knots in the Outer Eastern Area of the Cassiopeia A Supernova Remnant</a></div></article>
-<article class="list-card"><div class="year">2022</div><div><div class="meta">Zhou, P., Zhang, G.-Y., Zhou, X., et al. · <a href="https://scixplorer.org/abs/2022ApJ...931..144Z/abstract" rel="noopener" target="_blank">ApJ, 931, 144</a></div><a class="pub-title" href="https://scixplorer.org/abs/2022ApJ...931..144Z/abstract" rel="noopener" target="_blank">Unusually High HCO+/CO Ratios in and outside Supernova Remnant W49B</a></div></article>
-<article class="list-card"><div class="year">2020</div><div><div class="meta">Lee, Y.-H., Koo, B.-C., Lee, J.-J. · <a href="https://scixplorer.org/abs/2020AJ....160..263L/abstract" rel="noopener" target="_blank">AJ, 160, 263</a></div><a class="pub-title" href="https://scixplorer.org/abs/2020AJ....160..263L/abstract" rel="noopener" target="_blank">High-resolution Near-infrared Spectroscopic Study of Galactic Supernova Remnants. I. Kinematic Distances</a></div></article>
-<article class="list-card"><div class="year">2020</div><div><div class="meta">Koo, B.-C., Kim, H.-J., Oh, H., et al. · <a href="https://doi.org/10.1038/s41550-019-0996-4" rel="noopener" target="_blank">Nature Astronomy, 4, 584–589</a></div><a class="pub-title" href="https://doi.org/10.1038/s41550-019-0996-4" rel="noopener" target="_blank">Detection of pristine circumstellar material from the Cassiopeia A supernova progenitor</a></div></article>
-<article class="list-card"><div class="year">2019</div><div><div class="meta">Lee, Y.-H., Koo, B.-C., Lee, J.-J., et al. · <a href="https://scixplorer.org/abs/2019AJ....157..123L/abstract" rel="noopener" target="_blank">AJ, 157, 123</a></div><a class="pub-title" href="https://scixplorer.org/abs/2019AJ....157..123L/abstract" rel="noopener" target="_blank">Near-infrared [Fe II] and H₂ Emission-line Study of Galactic Supernova Remnants in the First Quadrant</a></div></article>
-<article class="list-card"><div class="year">2018</div><div><div class="meta">Koo, B.-C., Kim, H.-J., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2018ApJ...866..139K/abstract" rel="noopener" target="_blank">ApJ, 866, 139</a></div><a class="pub-title" href="https://scixplorer.org/abs/2018ApJ...866..139K/abstract" rel="noopener" target="_blank">A Deep Near-Infrared [Fe II]+[Si I] Emission Line Image of the Supernova Remnant Cassiopeia A</a></div></article>
-<article class="list-card"><div class="year">2018</div><div><div class="meta">Raymond, J. C., Koo, B.-C., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2018ApJ...866..128R/abstract" rel="noopener" target="_blank">ApJ, 866, 128</a></div><a class="pub-title" href="https://scixplorer.org/abs/2018ApJ...866..128R/abstract" rel="noopener" target="_blank">The Temperature and Ionization of Unshocked Ejecta in Cas A</a></div></article>
-<article class="list-card"><div class="year">2018</div><div><div class="meta">Oh, H., Pyo, T.-S., Koo, B.-C., et al. · <a href="https://scixplorer.org/abs/2018ApJ...858...23O/abstract" rel="noopener" target="_blank">ApJ, 858, 23</a></div><a class="pub-title" href="https://scixplorer.org/abs/2018ApJ...858...23O/abstract" rel="noopener" target="_blank">High-resolution Near-IR Spectral Mapping with H₂ and [Fe II] Lines of Multiple Outflows around LkHα 234</a></div></article>
-<article class="list-card"><div class="year">2017</div><div><div class="meta">Lee, Y.-H., Koo, B.-C., Moon, D.-S., et al. · <a href="https://scixplorer.org/abs/2017ApJ...837..118L/abstract" rel="noopener" target="_blank">ApJ, 837, 118</a></div><a class="pub-title" href="https://scixplorer.org/abs/2017ApJ...837..118L/abstract" rel="noopener" target="_blank">Near-Infrared Knots and Dense Fe Ejecta in the Cassiopeia A Supernova Remnant</a></div></article>
-<article class="list-card"><div class="year">2015</div><div><div class="meta">Koo, B.-C., &amp; Lee, Y.-H. · <a href="https://scixplorer.org/abs/2015PKAS...30..145K/abstract" rel="noopener" target="_blank">PKAS, 30, 145–148</a></div><a class="pub-title" href="https://scixplorer.org/abs/2015PKAS...30..145K/abstract" rel="noopener" target="_blank">Near-Infrared Spectroscopy of Young Galactic Supernova Remnants</a></div></article>
-<article class="list-card"><div class="year">2015</div><div><div class="meta">Lee, Y.-H., Koo, B.-C., Moon, D.-S., et al. · <a href="https://scixplorer.org/abs/2015ApJ...808...98L/abstract" rel="noopener" target="_blank">ApJ, 808, 98</a></div><a class="pub-title" href="https://scixplorer.org/abs/2015ApJ...808...98L/abstract" rel="noopener" target="_blank">Near-infrared Extinction due to Cool Supernova Dust in Cassiopeia A</a></div></article>
-<article class="list-card"><div class="year">2014</div><div><div class="meta">Shinn, J.-H., Kim, K.-T., Lee, J.-J., et al. · <a href="https://scixplorer.org/abs/2014ApJS..214...11S/abstract" rel="noopener" target="_blank">ApJS, 214, 11</a></div><a class="pub-title" href="https://scixplorer.org/abs/2014ApJS..214...11S/abstract" rel="noopener" target="_blank">[Fe II] 1.64 μm Imaging Observations of the Outflow Features around Ultracompact H II Regions in the First Galactic Quadrant</a></div></article>
-<article class="list-card"><div class="year">2014</div><div><div class="meta">Lee, J.-J., Koo, B.-C., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2014MNRAS.443.2650L/abstract" rel="noopener" target="_blank">MNRAS, 443, 2650–2660</a></div><a class="pub-title" href="https://scixplorer.org/abs/2014MNRAS.443.2650L/abstract" rel="noopener" target="_blank">UKIRT Widefield Infrared Survey for Fe⁺</a></div></article>
-<article class="list-card"><div class="year">2013</div><div><div class="meta">Koo, B.-C., Lee, Y.-H., Moon, D.-S., et al. · <a href="https://scixplorer.org/abs/2013Sci...342.1346K/abstract" rel="noopener" target="_blank">Science, 342, 1346</a></div><a class="pub-title" href="https://scixplorer.org/abs/2013Sci...342.1346K/abstract" rel="noopener" target="_blank">Phosphorus in the Young Supernova Remnant Cassiopeia A</a></div></article>
-<article class="list-card"><div class="year">2013</div><div><div class="meta">Shinn, J.-H., Pyo, T.-S., Lee, J.-J., et al. · <a href="https://scixplorer.org/abs/2013ApJ...777...45S/abstract" rel="noopener" target="_blank">ApJ, 777, 45</a></div><a class="pub-title" href="https://scixplorer.org/abs/2013ApJ...777...45S/abstract" rel="noopener" target="_blank">[Fe II] 1.64 μm Features of Jets and Outflows from Young Stellar Objects in the Carina Nebula</a></div></article>
-<article class="list-card"><div class="year">2013</div><div><div class="meta">Lee, H.-T., Liao, W.-T., Froebrich, D., et al. · <a href="https://scixplorer.org/abs/2013ApJS..208...23L/abstract" rel="noopener" target="_blank">ApJS, 208, 23</a></div><a class="pub-title" href="https://scixplorer.org/abs/2013ApJS..208...23L/abstract" rel="noopener" target="_blank">Near-infrared H₂ and Continuum Survey of Extended Green Objects. II. Complete Census for the Northern Galactic Plane</a></div></article>
-<article class="list-card"><div class="year">2011</div><div><div class="meta">Froebrich, D., Davis, C. J., Ioannidis, G., et al. · <a href="https://scixplorer.org/abs/2011MNRAS.413..480F/abstract" rel="noopener" target="_blank">MNRAS, 413, 480–492</a></div><a class="pub-title" href="https://scixplorer.org/abs/2011MNRAS.413..480F/abstract" rel="noopener" target="_blank">UWISH2 – the UKIRT Widefield Infrared Survey for H₂</a></div></article>
+<article class="list-card"><div class="year">2026</div><div><a class="pub-title" href="https://scixplorer.org/abs/2026ApJ..1000...60J/abstract" rel="noopener" target="_blank">A Comparative Study of the Supernova Remnant Cassiopeia A from 2013 to 2020 Deep [Fe II] + [Si I] Images</a><div class="meta">Jung, S.-H., Koo, B.-C., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2026ApJ..1000...60J/abstract" rel="noopener" target="_blank">ApJ, 1000, 60</a></div></div></article>
+<article class="list-card"><div class="year">2026</div><div><a class="pub-title" href="https://scixplorer.org/abs/2026PASJ...78..228K/abstract" rel="noopener" target="_blank">Near-infrared [P II] and [Fe II] line mapping of Galactic supernova remnants</a><div class="meta">Kokusho, T., Katsurada, Y., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2026PASJ...78..228K/abstract" rel="noopener" target="_blank">PASJ, 78, 228–241</a></div></div></article>
+<article class="list-card"><div class="year">2025</div><div><a class="pub-title" href="https://scixplorer.org/abs/2025AJ....169..227A/abstract" rel="noopener" target="_blank">Near-infrared [P II] and [Fe II] Emission-line Study of Supernova Remnants in the Magellanic Clouds</a><div class="meta">Aliste Castillo, R. L. S. E., Lee, Y.-H., Kokusho, T., et al. · <a href="https://scixplorer.org/abs/2025AJ....169..227A/abstract" rel="noopener" target="_blank">AJ, 169, 227</a></div></div></article>
+<article class="list-card"><div class="year">2024</div><div><a class="pub-title" href="https://scixplorer.org/abs/2024MNRAS.528.4657K/abstract" rel="noopener" target="_blank">Extended ionized Fe objects in the UWIFE survey</a><div class="meta">Kim, Y., Koo, B.-C., Pyo, T.-S., et al. · <a href="https://scixplorer.org/abs/2024MNRAS.528.4657K/abstract" rel="noopener" target="_blank">MNRAS, 528, 4657–4700</a></div></div></article>
+<article class="list-card"><div class="year">2023</div><div><a class="pub-title" href="https://scixplorer.org/abs/2023ApJ...953..131K/abstract" rel="noopener" target="_blank">Near-infrared Spectroscopy of Dense Ejecta Knots in the Outer Eastern Area of the Cassiopeia A Supernova Remnant</a><div class="meta">Koo, B.-C., Lee, Y.-H., Lee, J.-J., &amp; Yoon, S.-C. · <a href="https://scixplorer.org/abs/2023ApJ...953..131K/abstract" rel="noopener" target="_blank">ApJ, 953, 131</a></div></div></article>
+<article class="list-card"><div class="year">2022</div><div><a class="pub-title" href="https://scixplorer.org/abs/2022ApJ...931..144Z/abstract" rel="noopener" target="_blank">Unusually High HCO+/CO Ratios in and outside Supernova Remnant W49B</a><div class="meta">Zhou, P., Zhang, G.-Y., Zhou, X., et al. · <a href="https://scixplorer.org/abs/2022ApJ...931..144Z/abstract" rel="noopener" target="_blank">ApJ, 931, 144</a></div></div></article>
+<article class="list-card"><div class="year">2020</div><div><a class="pub-title" href="https://scixplorer.org/abs/2020AJ....160..263L/abstract" rel="noopener" target="_blank">High-resolution Near-infrared Spectroscopic Study of Galactic Supernova Remnants. I. Kinematic Distances</a><div class="meta">Lee, Y.-H., Koo, B.-C., Lee, J.-J. · <a href="https://scixplorer.org/abs/2020AJ....160..263L/abstract" rel="noopener" target="_blank">AJ, 160, 263</a></div></div></article>
+<article class="list-card"><div class="year">2020</div><div><a class="pub-title" href="https://doi.org/10.1038/s41550-019-0996-4" rel="noopener" target="_blank">Detection of pristine circumstellar material from the Cassiopeia A supernova progenitor</a><div class="meta">Koo, B.-C., Kim, H.-J., Oh, H., et al. · <a href="https://doi.org/10.1038/s41550-019-0996-4" rel="noopener" target="_blank">Nature Astronomy, 4, 584–589</a></div></div></article>
+<article class="list-card"><div class="year">2019</div><div><a class="pub-title" href="https://scixplorer.org/abs/2019AJ....157..123L/abstract" rel="noopener" target="_blank">Near-infrared [Fe II] and H₂ Emission-line Study of Galactic Supernova Remnants in the First Quadrant</a><div class="meta">Lee, Y.-H., Koo, B.-C., Lee, J.-J., et al. · <a href="https://scixplorer.org/abs/2019AJ....157..123L/abstract" rel="noopener" target="_blank">AJ, 157, 123</a></div></div></article>
+<article class="list-card"><div class="year">2018</div><div><a class="pub-title" href="https://scixplorer.org/abs/2018ApJ...866..139K/abstract" rel="noopener" target="_blank">A Deep Near-Infrared [Fe II]+[Si I] Emission Line Image of the Supernova Remnant Cassiopeia A</a><div class="meta">Koo, B.-C., Kim, H.-J., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2018ApJ...866..139K/abstract" rel="noopener" target="_blank">ApJ, 866, 139</a></div></div></article>
+<article class="list-card"><div class="year">2018</div><div><a class="pub-title" href="https://scixplorer.org/abs/2018ApJ...866..128R/abstract" rel="noopener" target="_blank">The Temperature and Ionization of Unshocked Ejecta in Cas A</a><div class="meta">Raymond, J. C., Koo, B.-C., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2018ApJ...866..128R/abstract" rel="noopener" target="_blank">ApJ, 866, 128</a></div></div></article>
+<article class="list-card"><div class="year">2018</div><div><a class="pub-title" href="https://scixplorer.org/abs/2018ApJ...858...23O/abstract" rel="noopener" target="_blank">High-resolution Near-IR Spectral Mapping with H₂ and [Fe II] Lines of Multiple Outflows around LkHα 234</a><div class="meta">Oh, H., Pyo, T.-S., Koo, B.-C., et al. · <a href="https://scixplorer.org/abs/2018ApJ...858...23O/abstract" rel="noopener" target="_blank">ApJ, 858, 23</a></div></div></article>
+<article class="list-card"><div class="year">2017</div><div><a class="pub-title" href="https://scixplorer.org/abs/2017ApJ...837..118L/abstract" rel="noopener" target="_blank">Near-Infrared Knots and Dense Fe Ejecta in the Cassiopeia A Supernova Remnant</a><div class="meta">Lee, Y.-H., Koo, B.-C., Moon, D.-S., et al. · <a href="https://scixplorer.org/abs/2017ApJ...837..118L/abstract" rel="noopener" target="_blank">ApJ, 837, 118</a></div></div></article>
+<article class="list-card"><div class="year">2015</div><div><a class="pub-title" href="https://scixplorer.org/abs/2015PKAS...30..145K/abstract" rel="noopener" target="_blank">Near-Infrared Spectroscopy of Young Galactic Supernova Remnants</a><div class="meta">Koo, B.-C., &amp; Lee, Y.-H. · <a href="https://scixplorer.org/abs/2015PKAS...30..145K/abstract" rel="noopener" target="_blank">PKAS, 30, 145–148</a></div></div></article>
+<article class="list-card"><div class="year">2015</div><div><a class="pub-title" href="https://scixplorer.org/abs/2015ApJ...808...98L/abstract" rel="noopener" target="_blank">Near-infrared Extinction due to Cool Supernova Dust in Cassiopeia A</a><div class="meta">Lee, Y.-H., Koo, B.-C., Moon, D.-S., et al. · <a href="https://scixplorer.org/abs/2015ApJ...808...98L/abstract" rel="noopener" target="_blank">ApJ, 808, 98</a></div></div></article>
+<article class="list-card"><div class="year">2014</div><div><a class="pub-title" href="https://scixplorer.org/abs/2014ApJS..214...11S/abstract" rel="noopener" target="_blank">[Fe II] 1.64 μm Imaging Observations of the Outflow Features around Ultracompact H II Regions in the First Galactic Quadrant</a><div class="meta">Shinn, J.-H., Kim, K.-T., Lee, J.-J., et al. · <a href="https://scixplorer.org/abs/2014ApJS..214...11S/abstract" rel="noopener" target="_blank">ApJS, 214, 11</a></div></div></article>
+<article class="list-card"><div class="year">2014</div><div><a class="pub-title" href="https://scixplorer.org/abs/2014MNRAS.443.2650L/abstract" rel="noopener" target="_blank">UKIRT Widefield Infrared Survey for Fe⁺</a><div class="meta">Lee, J.-J., Koo, B.-C., Lee, Y.-H., et al. · <a href="https://scixplorer.org/abs/2014MNRAS.443.2650L/abstract" rel="noopener" target="_blank">MNRAS, 443, 2650–2660</a></div></div></article>
+<article class="list-card"><div class="year">2013</div><div><a class="pub-title" href="https://scixplorer.org/abs/2013Sci...342.1346K/abstract" rel="noopener" target="_blank">Phosphorus in the Young Supernova Remnant Cassiopeia A</a><div class="meta">Koo, B.-C., Lee, Y.-H., Moon, D.-S., et al. · <a href="https://scixplorer.org/abs/2013Sci...342.1346K/abstract" rel="noopener" target="_blank">Science, 342, 1346</a></div></div></article>
+<article class="list-card"><div class="year">2013</div><div><a class="pub-title" href="https://scixplorer.org/abs/2013ApJ...777...45S/abstract" rel="noopener" target="_blank">[Fe II] 1.64 μm Features of Jets and Outflows from Young Stellar Objects in the Carina Nebula</a><div class="meta">Shinn, J.-H., Pyo, T.-S., Lee, J.-J., et al. · <a href="https://scixplorer.org/abs/2013ApJ...777...45S/abstract" rel="noopener" target="_blank">ApJ, 777, 45</a></div></div></article>
+<article class="list-card"><div class="year">2013</div><div><a class="pub-title" href="https://scixplorer.org/abs/2013ApJS..208...23L/abstract" rel="noopener" target="_blank">Near-infrared H₂ and Continuum Survey of Extended Green Objects. II. Complete Census for the Northern Galactic Plane</a><div class="meta">Lee, H.-T., Liao, W.-T., Froebrich, D., et al. · <a href="https://scixplorer.org/abs/2013ApJS..208...23L/abstract" rel="noopener" target="_blank">ApJS, 208, 23</a></div></div></article>
+<article class="list-card"><div class="year">2011</div><div><a class="pub-title" href="https://scixplorer.org/abs/2011MNRAS.413..480F/abstract" rel="noopener" target="_blank">UWISH2 – the UKIRT Widefield Infrared Survey for H₂</a><div class="meta">Froebrich, D., Davis, C. J., Ioannidis, G., et al. · <a href="https://scixplorer.org/abs/2011MNRAS.413..480F/abstract" rel="noopener" target="_blank">MNRAS, 413, 480–492</a></div></div></article>
 </div>
 <p class="note">The SciX author search also includes conference abstracts, observing proposals, and other research records.</p>
 </section>
